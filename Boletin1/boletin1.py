@@ -1,6 +1,5 @@
 from datetime import*
 import csv
-from collections import defaultdict
 
 
 class Asignatura:
@@ -71,6 +70,20 @@ class Profesor(Persona):
                     if asignatura.nombre == self.nombre_asignatura:
                         alumno.asignaturas[i] = (asignatura,float(nota_actualizada))
     
+    def mostrar_alumnos(self):
+        for i in self.alumnos:
+    # 1. Llamamos al método con paréntesis: i.getEdad()
+    # 2. Calculamos media y créditos para que la info sea útil
+            media = i.getNotaMedia()
+            creditos = i.getNumeroCreditosSuperados()
+    
+    # 3. Usamos \n para el salto de línea al final
+            print(f"Alumno: {i.apellidos}, {i.nombre}")
+            print(f"DNI: {i.dni} | Edad: {i.getEdad()} | Grupo: {i.grupo}")
+            print(f"Expediente: Media de {media:.2f} con {creditos} créditos aprobados")
+            print("-" * 40 + "\n")
+
+    
 
         
 
@@ -78,7 +91,7 @@ class Profesor(Persona):
 def cargar_datos():
     # 1. Cargar Asignaturas en un diccionario para búsqueda rápida
     asignaturas_dict = {}
-    with open('asignaturas.csv', mode='r', encoding='utf-8') as f:
+    with open('Boletin1/asignaturas.csv', mode='r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             asig = Asignatura(row['nombre'], row['creditos'], row['curso'], row['cuatrimestre'])
@@ -86,7 +99,7 @@ def cargar_datos():
 
     # 2. Cargar Alumnos en un diccionario {dni: objeto_alumno}
     alumnos_dict = {}
-    with open('alumnos.csv', mode='r', encoding='utf-8') as f:
+    with open('Boletin1/alumnos.csv', mode='r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             # Importante: el orden de los argumentos según tu clase
@@ -94,14 +107,14 @@ def cargar_datos():
                 apellidos=row['apellidos'], 
                 nombre=row['nombre'], 
                 dni=row['dni'], 
-                fecha_nacimiento=row['fecha_nacimiento'], # Asegúrate de que el CSV tenga este campo
+                fecha_nacimiento=row['fechaNac'],
                 asignaturas=[], 
                 grupo=row['grupo']
             )
             alumnos_dict[alum.dni] = alum
 
     # 3. Cargar Notas y vincular objetos
-    with open("notas.csv", mode="r", encoding="utf-8") as f:
+    with open("Boletin1/notas.csv", mode="r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             dni = row['dni_alumno']
@@ -131,25 +144,40 @@ profesor_clase = Profesor(
 )
 
 
-# --- Mostrar resultados por pantalla ---
 
-print(f"\n{'LISTADO DE ALUMNOS - PROFESOR: ' + profesor_clase.nombre.upper():^60}")
-print("=" * 65)
-print(f"{'DNI':<12} | {'APELLIDOS, NOMBRE':<25} | {'MEDIA':<7} | {'CRÉDITOS'}")
-print("-" * 65)
 
-# Iteramos sobre la lista de alumnos que tiene el profesor
-for alumno in profesor_clase.alumnos:
-    # Obtenemos los datos calculados mediante los métodos de la clase Alumno
-    nota_media = alumno.getNotaMedia()
-    creditos_totales = alumno.getNumeroCreditosSuperados()
-    nombre_formateado = f"{alumno.apellidos}, {alumno.nombre}"
-    
-    # Imprimimos la fila con formato para que las columnas queden alineadas
-    print(f"{alumno.dni:<12} | {nombre_formateado:<25} | {nota_media:<7.2f} | {creditos_totales:>8}")
 
-print("-" * 65)
-print(f"Total de alumnos gestionados: {len(profesor_clase.alumnos)}")
+def crear_profesores_por_asignatura(diccionario_alumnos):
+    # Usaremos un diccionario para almacenar los profesores: { "NombreAsignatura": objeto_profesor }
+    profesores_por_asig = {}
+
+    # 1. Recorremos todos los alumnos para ver en qué asignaturas están matriculados
+    for alumno in diccionario_alumnos.values():
+        for asignatura_obj, nota in alumno.asignaturas:
+            nombre_asig = asignatura_obj.nombre
+            
+            # 2. Si aún no existe un profesor para esta asignatura, lo creamos
+            if nombre_asig not in profesores_por_asig:
+                profesores_por_asig[nombre_asig] = Profesor(
+                    apellidos="Pendiente", 
+                    nombre="Prof. " + nombre_asig, 
+                    dni="00000000X", 
+                    fecha_nacimiento="1980-01-01", 
+                    nombre_asignatura=nombre_asig, 
+                    alumnos=[]
+                )
+            
+            # 3. Añadimos al alumno a la lista de ese profesor si no está ya
+            if alumno not in profesores_por_asig[nombre_asig].alumnos:
+                profesores_por_asig[nombre_asig].alumnos.append(alumno)
+                
+    return profesores_por_asig
+
+dic_profesores = crear_profesores_por_asignatura(diccionario_alumnos)
+
+for i in dic_profesores.values():
+    print(f"Profesor de {i.nombre_asignatura}"+"\n")
+    i.mostrar_alumnos()
             
                
 
