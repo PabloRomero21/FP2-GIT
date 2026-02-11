@@ -134,7 +134,7 @@ def cargar_datos():
 diccionario_alumnos = cargar_datos()
 
 
-profesor_clase = Profesor(
+profesor_global = Profesor(
     apellidos="Gonzalez",
     nombre="Pepe",
     dni="12345678Z",
@@ -173,11 +173,13 @@ def crear_profesores_por_asignatura(diccionario_alumnos):
                 
     return profesores_por_asig
 
-dic_profesores = crear_profesores_por_asignatura(diccionario_alumnos)
+#dic_profesores = crear_profesores_por_asignatura(diccionario_alumnos)
 
-for i in dic_profesores.values():
-    print(f"Profesor de {i.nombre_asignatura}"+"\n")
-    i.mostrar_alumnos()
+#for i in dic_profesores.values():
+#    print(f"Profesor de {i.nombre_asignatura}"+"\n")
+#9    i.mostrar_alumnos()
+
+profesor_global.mostrar_alumnos()
             
                
 
