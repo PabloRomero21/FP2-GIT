@@ -1,308 +1,13 @@
-1
+# 🎓 Registro de Tutoría y Desarrollo de Código
+*Conversación de asistencia para la práctica de Programación Orientada a Objetos.*
+Extraccion del pdf: 2508 825
 
-    Enunciado:
-    Tenemos
-    un fichero departamentos.pdf con unos datos de los 134 departamentos
-    de la Universidad de Sevilla. Las columnas son: “Número ETC” que
-    es una medida relativa a la carga docente del departamento, el número
-    de profesores a Tiempo Completo, el número de profesores a Tiempo
-    Parcial, el número total de profesores obtenido como TC+1/2*TP y el
-    coeficiente de experimentalidad de la docencia de ese departamento. 
 
-    Lacarga docente real
-    de un departamento se mide multiplicando el número de ETC por la
-    experimentalidad y dividiéndolo por el número total de profesores. 
 
-    Se
-    pide:
+---
 
-    Una
-        clase Departamento con los atributos necesarios. Añada
-        las funciones que crea necesarias.
-    Una
-        clase Universidad que contenga una lista de Departamentos, y un
-        nombre.
-
-
-    Como vamos a estar leyendo datos de un pdf quiero que me agreges una validacionm para el numero total de profesores , comproando si el dato leido del pdf concurda con la formula.
-    Recurda siempre basarte en los fundamentos de la POO.
-
-2
-
-    Ahora necesito una clase Factoria para leer el fichero pdf y construir un objeto de tipo Universidad.
-    Este pdf necesite una lectura y formateo de los datos ya que se trata de una archivo que contiene otras palabras e informacion no relevante.
-    Este es el pdf en cuestion(Adjunto archivo), haz tambieen en el codigo una funcion para comprobar lo que se ha leido y verificar si es correcto, despues borraré esta funcion.
-    El pdf se llama Departamentos.pdf y lo tendre en la misma carpeta que el usa os para saber la direccion actual y no tener errores de direcciones
-
-3
-
-    Me ha dado la siguiente lectura, no estamos detectando los datos por separado sino un dato gigante que contiene los otros seis, como podemo sarreglalo?:
-
-    --- INICIANDO VERIFICACIÓN DE LECTURA CRUDA ---
-
-    [Página 1 | Tabla 1]
-    ['Número\nNúmero Número Número\nTotal Coeficiente\nDepartamento ETC Profesores TC Profesores TP\nProfesores Experimentalidad\n(1) (2) (2)\n(2)']
-    ['DEPARTAMENTO DE ADMINISTRACIÓN DE EMPRESAS Y MARKETING 1.479,36 98,00 16,00 106,00 1,10']
-    ['DEPARTAMENTO DE AGRONOMÍA 229,47 36,00 3,00 37,50 1,50']
-    ['DEPARTAMENTO DE ÁLGEBRA 200,98 17,00 0,00 17,00 1,20']
-    ['DEPARTAMENTO DE ANÁLISIS ECONÓMICO Y ECONOMÍA POLÍTICA 648,28 34,00 11,00 39,50 1,10']
-    ['DEPARTAMENTO DE ANÁLISIS MATEMÁTICO 237,18 29,00 0,00 29,00 1,20']
-    ['DEPARTAMENTO DE ANATOMÍA Y EMBRIOLOGÍA HUMANA 229,25 10,00 6,00 13,00 1,60']
-    ['DEPARTAMENTO DE ANTROPOLOGÍA SOCIAL 220,37 24,00 0,00 24,00 1,10']
-    ['DEPARTAMENTO DE ARQUITECTURA Y TECNOLOGÍA DE COMPUTADORES 255,67 31,00 3,00 32,50 1,40']
-    ['DEPARTAMENTO DE BIOLOGÍA CELULAR 163,77 24,00 0,00 24,00 1,50']
-    ['DEPARTAMENTO DE BIOLOGÍA VEGETAL Y ECOLOGÍA 386,58 59,00 3,00 60,50 1,50']
-    ['DEPARTAMENTO DE BIOQUÍMICA MÉDICA Y BIOLOGÍA MOLECULAR E INMUNOLOGÍA 245,84 25,00 1,00 25,50 1,50']
-    ['DEPARTAMENTO DE BIOQUÍMICA VEGETAL Y BIOLOGÍA MOLECULAR 182,14 39,00 0,00 39,00 1,50']
-    ['DEPARTAMENTO DE BIOQUÍMICA Y BIOLOGÍA MOLECULAR 157,60 22,00 0,00 22,00 1,50']
-    ['DEPARTAMENTO DE CIENCIAS DE LA COMPUTACIÓN E INTELIGENCIA ARTIFICIAL 330,64 21,00 5,00 23,50 1,40']
-    ['DEPARTAMENTO DE CIENCIAS JURÍDICAS BÁSICAS 323,63 18,00 2,00 19,00 1,10']
-    ['DEPARTAMENTO DE CIRUGÍA 417,54 19,00 93,00 65,50 1,60']
-    ['DEPARTAMENTO DE CITOLOGÍA E HISTOLOGÍA NORMAL Y PATOLÓGICA 203,64 13,00 3,00 14,50 1,60']
-    ['DEPARTAMENTO DE COMUNICACIÓN AUDIOVISUAL Y PUBLICIDAD 945,99 42,00 12,00 48,00 1,20']
-    ['DEPARTAMENTO DE CONSTRUCCIONES ARQUITECTÓNICAS I 373,60 45,00 10,00 50,00 1,40']
-    ['DEPARTAMENTO DE CONSTRUCCIONES ARQUITECTÓNICAS II 244,13 33,00 14,00 40,00 1,40']
-    ['DEPARTAMENTO DE CONTABILIDAD Y ECONOMÍA FINANCIERA 860,16 54,00 14,00 61,00 1,10']
-    ['DEPARTAMENTO DE CRISTALOGRAFÍA, MINERALOGÍA Y QUÍMICA AGRÍCOLA 188,88 22,00 0,00 22,00 1,50']
-    ['DEPARTAMENTO DE DERECHO ADMINISTRATIVO 460,29 17,00 17,00 25,50 1,10']
-    ['DEPARTAMENTO DE DERECHO CIVIL Y DERECHO INTERNACIONAL PRIVADO 718,75 35,00 8,00 39,00 1,10']
-    ['DEPARTAMENTO DE DERECHO CONSTITUCIONAL 310,29 18,00 4,00 20,00 1,10']
-    ['DEPARTAMENTO DE DERECHO DEL TRABAJO Y DE LA SEGURIDAD SOCIAL 544,57 27,00 14,00 34,00 1,10']
-    ['DEPARTAMENTO DE DERECHO FINANCIERO Y TRIBUTARIO 339,99 14,00 13,00 20,50 1,10']
-
-    [Página 1 | Tabla 2]
-
-    [Página 2 | Tabla 1]
-    ['Número\nNúmero Número Número\nTotal Coeficiente\nDepartamento ETC Profesores TC Profesores TP\nProfesores Experimentalidad\n(1) (2) (2)\n(2)']
-    ['DEPARTAMENTO DE DERECHO INTERNACIONAL PÚBLICO Y RELACIONES INTERNACIONALES 239,84 15,00 4,00 17,00 1,10']
-    ['DEPARTAMENTO DE DERECHO MERCANTIL 423,93 20,00 11,00 25,50 1,10']
-    ['DEPARTAMENTO DE DERECHO PENAL Y CIENCIAS CRIMINALES 369,48 18,00 7,00 21,50 1,10']
-    ['DEPARTAMENTO DE DERECHO PROCESAL 352,34 13,00 8,00 17,00 1,10']
-    ['DEPARTAMENTO DE DIBUJO 346,58 33,00 3,00 34,50 1,30']
-    ['DEPARTAMENTO DE DIDÁCTICA DE LA LENGUA Y LA LITERATURA Y FILOLOGÍAS INTEGRADAS 312,73 19,00 2,00 20,00 1,10']
-    ['DEPARTAMENTO DE DIDÁCTICA DE LAS CIENCIAS EXPERIMENTALES Y SOCIALES 360,53 22,00 6,00 25,00 1,30']
-    ['DEPARTAMENTO DE DIDÁCTICA DE LAS MATEMÁTICAS 248,44 15,00 5,00 17,50 1,20']
-    ['DEPARTAMENTO DE DIDÁCTICA Y ORGANIZACIÓN EDUCATIVA 547,97 46,00 3,00 47,50 1,20']
-    ['DEPARTAMENTO DE ECONOMÍA APLICADA I 772,84 43,00 7,00 46,50 1,10']
-    ['DEPARTAMENTO DE ECONOMÍA APLICADA II 230,68 16,00 0,00 16,00 1,10']
-    ['DEPARTAMENTO DE ECONOMÍA APLICADA III 351,26 21,00 4,00 23,00 1,10']
-    ['DEPARTAMENTO DE ECONOMÍA E HISTORIA ECONÓMICA 475,55 30,00 5,00 32,50 1,10']
-    ['DEPARTAMENTO DE ECONOMÍA FINANCIERA Y DIRECCIÓN DE OPERACIONES 717,73 50,00 6,00 53,00 1,10']
-    ['DEPARTAMENTO DE ECUACIONES DIFERENCIALES Y ANÁLISIS NUMÉRICO 255,08 24,00 1,00 24,50 1,20']
-    ['DEPARTAMENTO DE EDUCACIÓN ARTÍSTICA 326,67 20,00 6,00 23,00 1,30']
-    ['DEPARTAMENTO DE EDUCACIÓN FÍSICA Y DEPORTE 496,27 42,00 8,00 46,00 1,30']
-    ['DEPARTAMENTO DE ELECTRÓNICA Y ELECTROMAGNETISMO 196,52 30,00 2,00 31,00 1,40']
-    ['DEPARTAMENTO DE ENFERMERÍA 937,02 40,00 68,00 74,00 1,60']
-    ['DEPARTAMENTO DE ESCULTURA E HISTORIA DE LAS ARTES PLÁSTICAS 265,25 29,00 3,00 30,50 1,30']
-    ['DEPARTAMENTO DE ESTADÍSTICA E INVESTIGACIÓN OPERATIVA 422,14 31,00 1,00 31,50 1,20']
-    ['DEPARTAMENTO DE ESTÉTICA E HISTORIA DE LA FILOSOFÍA 160,12 13,00 1,00 13,50 1,20']
-    ['DEPARTAMENTO DE ESTOMATOLOGÍA 339,86 31,00 65,00 63,50 1,60']
-    ['DEPARTAMENTO DE ESTRUCTURAS DE EDIFICACIÓN E INGENIERÍA DEL TERRENO 228,51 29,00 12,00 35,00 1,40']
-    ['DEPARTAMENTO DE EXPRESIÓN GRAFICA E INGENIERÍA EN LA EDIFICACIÓN 67,65 15,00 6,00 18,00 1,40']
-    ['DEPARTAMENTO DE EXPRESIÓN GRÁFICA Y ARQUITECTÓNICA 179,92 26,00 7,00 29,50 1,40']
-    ['DEPARTAMENTO DE FARMACIA Y TECNOLOGÍA FARMACÉUTICA 284,84 25,00 8,00 29,00 1,50']
-    ['DEPARTAMENTO DE FARMACOLOGÍA 214,73 18,00 4,00 20,00 1,50']
-
-    [Página 2 | Tabla 2]
-
-    [Página 3 | Tabla 1]
-    ['Número\nNúmero Número Número\nTotal Coeficiente\nDepartamento ETC Profesores TC Profesores TP\nProfesores Experimentalidad\n(1) (2) (2)\n(2)']
-    ['DEPARTAMENTO DE FARMACOLOGÍA, PEDIATRÍA Y RADIOLOGÍA 283,57 9,00 34,00 26,00 1,60']
-    ['DEPARTAMENTO DE FILOLOGÍA ALEMANA 104,01 21,00 0,00 21,00 1,10']
-    ['DEPARTAMENTO DE FILOLOGÍA FRANCESA 242,96 20,00 3,00 21,50 1,10']
-    ['DEPARTAMENTO DE FILOLOGÍA GRIEGA Y LATINA 179,36 20,00 0,00 20,00 1,10']
-    ['DEPARTAMENTO DE FILOLOGÍA INGLESA (LENGUA INGLESA) 385,12 29,00 1,00 29,50 1,10']
-    ['DEPARTAMENTO DE FILOLOGÍA INGLESA (LITERATURA INGLESA Y NORTEAMERICANA) 265,59 22,00 0,00 22,00 1,10']
-    ['DEPARTAMENTO DE FILOLOGÍAS INTEGRADAS 219,80 31,00 4,00 33,00 1,10']
-    ['DEPARTAMENTO DE FILOSOFÍA DEL DERECHO 168,03 12,00 0,00 12,00 1,10']
-    ['DEPARTAMENTO DE FILOSOFÍA Y LÓGICA Y FILOSOFÍA DE LA CIENCIA 148,76 13,00 0,00 13,00 1,10']
-    ['DEPARTAMENTO DE FÍSICA APLICADA I 362,39 33,00 0,00 33,00 1,40']
-    ['DEPARTAMENTO DE FÍSICA APLICADA II 135,69 21,00 0,00 21,00 1,40']
-    ['DEPARTAMENTO DE FÍSICA APLICADA III 267,00 17,00 0,00 17,00 1,40']
-    ['DEPARTAMENTO DE FÍSICA ATÓMICA, MOLECULAR Y NUCLEAR 276,79 39,00 0,00 39,00 1,40']
-    ['DEPARTAMENTO DE FÍSICA DE LA MATERIA CONDENSADA 358,17 41,00 6,00 44,00 1,40']
-    ['DEPARTAMENTO DE FISIOLOGÍA 238,39 29,00 1,00 29,50 1,50']
-    ['DEPARTAMENTO DE FISIOLOGÍA MÉDICA Y BIOFÍSICA 271,88 39,00 0,00 39,00 1,50']
-    ['DEPARTAMENTO DE FISIOTERAPIA 227,74 28,00 47,00 51,50 1,60']
-    ['DEPARTAMENTO DE GENÉTICA 119,50 38,00 0,00 38,00 1,50']
-    ['DEPARTAMENTO DE GEOGRAFÍA FÍSICA Y ANÁLISIS GEOGRÁFICO REGIONAL 280,67 35,00 0,00 35,00 1,20']
-    ['DEPARTAMENTO DE GEOGRAFÍA HUMANA 179,71 20,00 3,00 21,50 1,20']
-    ['DEPARTAMENTO DE GEOMETRÍA Y TOPOLOGÍA 131,75 13,00 0,00 13,00 1,20']
-    ['DEPARTAMENTO DE HISTORIA ANTIGUA 176,75 14,00 0,00 14,00 1,10']
-    ['DEPARTAMENTO DE HISTORIA CONTEMPORÁNEA 269,84 18,00 0,00 18,00 1,10']
-    ['DEPARTAMENTO DE HISTORIA DE AMÉRICA 93,26 10,00 0,00 10,00 1,10']
-    ['DEPARTAMENTO DE HISTORIA DEL ARTE 574,90 40,00 1,00 40,50 1,20']
-    ['DEPARTAMENTO DE HISTORIA MEDIEVAL Y CIENCIAS Y TÉCNICAS HISTORIOGRÁFICAS 228,14 14,00 3,00 15,50 1,20']
-    ['DEPARTAMENTO DE HISTORIA MODERNA 144,55 10,00 0,00 10,00 1,10']
-    ['DEPARTAMENTO DE HISTORIA, TEORÍA Y COMPOSICIÓN ARQUITECTÓNICAS 185,14 27,00 3,00 28,50 1,40']
-
-    [Página 3 | Tabla 2]
-
-    [Página 4 | Tabla 1]
-    ['Número\nNúmero Número Número\nTotal Coeficiente\nDepartamento ETC Profesores TC Profesores TP\nProfesores Experimentalidad\n(1) (2) (2)\n(2)']
-    ['DEPARTAMENTO DE INGENIERÍA AEROESPACIAL Y MECÁNICA DE FLUIDOS 369,28 32,00 8,00 36,00 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA DE LA CONSTRUCCIÓN Y PROYECTOS DE INGENIERÍA 72,29 6,00 16,00 14,00 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA DE SISTEMAS Y AUTOMÁTICA 376,47 39,00 2,00 40,00 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA DEL DISEÑO 437,47 28,00 21,00 38,50 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA ELÉCTRICA 421,24 34,00 9,00 38,50 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA ELECTRÓNICA 277,83 40,00 0,00 40,00 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA ENERGÉTICA 410,20 33,00 7,00 36,50 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA GRÁFICA 275,09 32,00 11,00 37,50 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA MECÁNICA Y FABRICACIÓN 274,71 31,00 2,00 32,00 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA QUÍMICA 209,99 30,00 1,00 30,50 1,50']
-    ['DEPARTAMENTO DE INGENIERÍA QUÍMICA Y AMBIENTAL 319,94 29,00 6,00 32,00 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA TELEMÁTICA 145,15 14,00 5,00 16,50 1,40']
-    ['DEPARTAMENTO DE INGENIERÍA Y CIENCIA DE LOS MATERIALES Y DEL TRANSPORTE 359,42 28,00 8,00 32,00 1,40']
-    ['DEPARTAMENTO DE LENGUA ESPAÑOLA, LINGÜÍSTICA Y TEORÍA DE LA LITERATURA 542,90 38,00 5,00 40,50 1,10']
-    ['DEPARTAMENTO DE LENGUAJES Y SISTEMAS INFORMÁTICOS 933,57 84,00 3,00 85,50 1,40']
-    ['DEPARTAMENTO DE LITERATURA ESPAÑOLA E HISPANOAMERICANA 442,81 30,00 1,00 30,50 1,10']
-    ['DEPARTAMENTO DE MATEMÁTICA APLICADA I 583,33 61,00 0,00 61,00 1,20']
-    ['DEPARTAMENTO DE MATEMÁTICA APLICADA II 654,23 45,00 0,00 45,00 1,20']
-    ['DEPARTAMENTO DE MECÁNICA DE MEDIOS CONTINUOS Y TEORÍA DE ESTRUCTURAS 337,90 31,00 2,00 32,00 1,40']
-    ['DEPARTAMENTO DE MEDICINA 548,58 32,00 86,00 75,00 1,60']
-    ['DEPARTAMENTO DE MEDICINA PREVENTIVA Y SALUD PÚBLICA 196,39 14,00 11,00 19,50 1,40']
-    ['DEPARTAMENTO DE METAFÍSICA Y CORRIENTES ACTUALES DE LA FILOSOFÍA, ÉTICA Y FILOSOFÍA POLÍTICA 143,63 15,00 0,00 15,00 1,10']
-    ['DEPARTAMENTO DE MÉTODOS DE INVESTIGACIÓN Y DIAGNÓSTICO EN EDUCACIÓN 255,07 21,00 8,00 25,00 1,20']
-    ['DEPARTAMENTO DE MICROBIOLOGÍA 162,54 27,00 2,00 28,00 1,50']
-    ['DEPARTAMENTO DE MICROBIOLOGÍA Y PARASITOLOGÍA 197,70 23,00 2,00 24,00 1,50']
-    ['DEPARTAMENTO DE MOTRICIDAD HUMANA Y RENDIMIENTO DEPORTIVO 163,47 13,00 3,00 14,50 1,30']
-    ['DEPARTAMENTO DE NUTRICIÓN Y BROMATOLOGÍA, TOXICOLOGÍA Y MEDICINA LEGAL 199,89 32,00 0,00 32,00 1,50']
-    ['DEPARTAMENTO DE ORGANIZACIÓN INDUSTRIAL Y GESTIÓN DE EMPRESAS I 443,46 30,00 9,00 34,50 1,20']
-
-    [Página 4 | Tabla 2]
-
-    [Página 5 | Tabla 1]
-    ['Número\nNúmero Número Número\nTotal Coeficiente\nDepartamento ETC Profesores TC Profesores TP\nProfesores Experimentalidad\n(1) (2) (2)\n(2)']
-    ['DEPARTAMENTO DE ORGANIZACIÓN INDUSTRIAL Y GESTIÓN DE EMPRESAS II 250,52 12,00 9,00 16,50 1,10']
-    ['DEPARTAMENTO DE PERIODISMO I 434,91 20,00 6,00 23,00 1,20']
-    ['DEPARTAMENTO DE PERIODISMO II 398,00 22,00 5,00 24,50 1,20']
-    ['DEPARTAMENTO DE PERSONALIDAD, EVALUACIÓN Y TRATAMIENTO PSICOLÓGICOS 445,49 32,00 5,00 34,50 1,20']
-    ['DEPARTAMENTO DE PINTURA 285,40 32,00 2,00 33,00 1,20']
-    ['DEPARTAMENTO DE PODOLOGÍA 134,85 20,00 14,00 27,00 1,60']
-    ['DEPARTAMENTO DE PREHISTORIA Y ARQUEOLOGÍA 209,06 23,00 6,00 26,00 1,20']
-    ['DEPARTAMENTO DE PROYECTOS ARQUITECTÓNICOS 391,29 64,00 5,00 66,50 1,40']
-    ['DEPARTAMENTO DE PSICOLOGÍA EVOLUTIVA Y DE LA EDUCACIÓN 610,46 48,00 3,00 49,50 1,20']
-    ['DEPARTAMENTO DE PSICOLOGÍA EXPERIMENTAL 583,87 52,00 3,00 53,50 1,30']
-    ['DEPARTAMENTO DE PSICOLOGÍA SOCIAL 495,10 38,00 4,00 40,00 1,20']
-    ['DEPARTAMENTO DE PSIQUIATRÍA 183,93 10,00 14,00 17,00 1,60']
-    ['DEPARTAMENTO DE QUÍMICA ANALÍTICA 195,36 27,00 0,00 27,00 1,50']
-    ['DEPARTAMENTO DE QUÍMICA FÍSICA 220,36 30,00 0,00 30,00 1,50']
-    ['DEPARTAMENTO DE QUÍMICA INORGÁNICA 221,28 45,00 1,00 45,50 1,50']
-    ['DEPARTAMENTO DE QUÍMICA ORGÁNICA 134,88 21,00 0,00 21,00 1,50']
-    ['DEPARTAMENTO DE QUÍMICA ORGÁNICA Y FARMACÉUTICA 252,37 22,00 1,00 22,50 1,50']
-    ['DEPARTAMENTO DE SOCIOLOGÍA 410,70 25,00 2,00 26,00 1,10']
-    ['DEPARTAMENTO DE TECNOLOGÍA ELECTRÓNICA 591,90 54,00 4,00 56,00 1,40']
-    ['DEPARTAMENTO DE TEORÍA DE LA SEÑAL Y COMUNICACIONES 108,93 20,00 0,00 20,00 1,40']
-    ['DEPARTAMENTO DE TEORÍA E HISTORIA DE LA EDUCACIÓN Y PEDAGOGÍA SOCIAL 319,64 24,00 4,00 26,00 1,10']
-    ['DEPARTAMENTO DE URBANÍSTICA Y ORDENACIÓN DEL TERRITORIO 199,08 23,00 9,00 27,50 1,40']
-    ['DEPARTAMENTO DE ZOOLOGÍA 102,46 22,00 0,00 22,00 1,50']
-
-    [Página 5 | Tabla 2]
-    --- FIN DE LA VERIFICACIÓN ---
-
-    ============================================================
-
-    Iniciando la lectura y creación de objetos...
-
-    --- Departamentos de la Universidad de Sevilla ---
-    No hay departamentos registrados aún.
-
-4
-    Ahora vamos a crear funciones para la clse universidad usando los datos que leemos del pdf:
-
-        • Dado n, cuáles son los n departamentos con mayor carga docente real.
-        • Dado n, cuáles son los n departamentos con menor carga docente real.
-        • Devuelve un diccionario con el número de departamentos de cada coeficiente de experimentalidad.
-        • Devuelve un diccionario que a cada coeficiente de experimentalidad le haga corresponder la media de la carga docente real de los departamentos con ese coeficiente. 
-        • Usando el ejercicio anterior devuelva cuáles son los coeficientes de experimentalidad con mayor y menor media de carga docente real.
-
-5
-
-    Ahora quiero tener un archivo main.py y las clases es sus respectivos archivos.py
-
-6 
-    Que validaciones de seguridad podemos agaregar para: 
-
-    def __init__(self, nombre: str, numero_etc: float, prof_tc: float, prof_tp: float, experimentalidad: float):
-        self.nombre = nombre
-        self.numero_etc = numero_etc
-        self.prof_tc = prof_tc
-        self.prof_tp = prof_tp
-        self.experimentalidad = experimentalidad
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Has dicho
+### 👤 Tú (Estudiante):
+> 
 
 Enunciado:
 
@@ -344,9 +49,10 @@ Una
 clase Universidad que contenga una lista de Departamentos, y un
 
 nombre.
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Hola! Soy FP2, tu asistente especializado en programación orientada a objetos (POO) en Python. Entiendo perfectamente lo que necesitas: un código estructurado, limpio y fácil de mantener.
 
@@ -445,7 +151,12 @@ Detalles a destacar del diseño:
     Atributo Nombre: Aunque no lo pedía explícitamente el enunciado de las columnas, he añadido un atributo nombre al departamento porque en POO es fundamental poder identificar los objetos de manera unívoca o amigable.
 
 ¿Te gustaría que te escriba ahora el código necesario usando librerías como pandas o PyPDF2 para leer automáticamente ese archivo departamentos.pdf y volcarlo directamente en esta estructura de clases?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 no es mejor?
 
@@ -453,9 +164,10 @@ no es mejor?
 class Departamento:
 
     def __init__(self,nombre,numero_etc,numero_profesores_tc,numero_profesores_tp,numero_total_profesores,coef_exp,carga_docente_real):
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Es una excelente pregunta! Es muy natural pensar en esa estructura, sobre todo porque cuando lees un archivo (como tu PDF), normalmente quieres meter cada columna directamente en el objeto tal y como viene.
 
@@ -490,12 +202,18 @@ En resumen
 La forma en la que te lo diseñé inicialmente protege tu código. Al calcular el total de profesores internamente y usar un método para la carga docente, garantizamos que las matemáticas siempre cuadren perfectamente con los datos de ese departamento.
 
 ¿Tiene sentido esto que te comento? Si lo ves claro y estás de acuerdo, ¿te gustaría que pasemos a escribir el código para leer los datos de ese archivo departamentos.pdf e instanciar estos objetos?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 la cosa es que vamos a estar leyendo datos del siguiente pdf, podemos meter una validacion el que codigo que vea si la formula coincide con el numero real de profesores que contiene el pdf?
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Esa es una idea brillante! Y me alegra mucho que lo propongas.
 
@@ -631,12 +349,18 @@ if __name__ == "__main__":
     Código limpio: La lógica de lectura (limpiar comas, abrir el archivo) está separada de la lógica de negocio (calcular cargas docentes).
 
 ¿Quieres que te explique cómo instalar la librería pdfplumber para poder ejecutar este código en tu ordenador, o tienes alguna duda sobre la función de limpieza de números?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 quieroo que en principio me pases solo la clase universidad y la clase departamento para ir haciendo mi codigo poco a poco
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Me parece la decisión más acertada! Ir poco a poco, construyendo y probando la base sólida de los objetos antes de meterse con la lectura de archivos, es exactamente como debe trabajar un buen programador.
 
@@ -713,12 +437,18 @@ class Universidad:
 Con esto ya tienes el "esqueleto" de tu programa orientado a objetos perfectamente definido.
 
 ¿Te gustaría que hagamos un pequeño bloque de prueba (un if __name__ == "__main__":) creando un par de departamentos a mano para comprobar que la validación funciona correctamente, o prefieres pasar directamente a la parte de leer el PDF?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 puede ser la excepcion un simple pirnt que indice, para el objeto tal no coincide tal y tal
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Totalmente! De hecho, desde un punto de vista práctico, cambiar una excepción estricta por un print (lo que llamamos un "soft warning" o advertencia leve) es una decisión de diseño muy inteligente para este caso.
 
@@ -792,12 +522,18 @@ class Universidad:
 Al delegar la validación en un print, tu clase Departamento sigue siendo responsable de sus datos (hace el cálculo correcto matemáticamente), pero ahora actúa también como un "chivato" que te avisa amablemente en la consola si los datos de origen vienen sucios, sin arruinar la ejecución general.
 
 ¿Te gustaría que te prepare un pequeño bloque de código de prueba (if __name__ == "__main__":) con un departamento correcto y otro con un error provocado a propósito para que veas cómo salta el aviso en tu consola?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 es recomendable que la carga docente real se tambien un atributodel objeto?
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Otra pregunta fantástica! Estás tocando un debate clásico en el diseño de software orientado a objetos: ¿Atributo o Método?
 
@@ -870,7 +606,12 @@ print(mi_departamento.carga_docente_real)
 Queda un código súper limpio, seguro y 100% fiel a los principios de la Programación Orientada a Objetos.
 
 ¿Qué te parece este enfoque con @property? Si te gusta cómo ha quedado la estructura de las clases, ¿quieres que pasemos a crear la función que usa la librería para extraer los datos reales del PDF que subiste?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 class Departamento:
 
@@ -938,8 +679,6 @@ class Departamento:
 
         return f"Depto: {self.nombre} | Total Prof: {self.total_profesores} | Carga Real: {self.carga_docente_real}"
 
-
-
 class Universidad:
 
     """Clase que representa una Universidad y gestiona sus departamentos."""
@@ -981,9 +720,10 @@ class Universidad:
             for depto in self.departamentos:
 
                 print(depto)
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Me gusta mucho cómo va quedando! Has optado por mantener la estructura clara y hacer que la carga docente se guarde como un atributo.
 
@@ -1079,12 +819,18 @@ class Universidad:
 ¡Ahora la base está robusta y perfecta! Ya tenemos nuestras "fábricas" de objetos listas para recibir datos.
 
 ¿Te parece bien que demos el siguiente paso y escribamos juntos la función con pdfplumber para leer automáticamente tu PDF de 134 departamentos?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
     Ahora necesito una clase Factoria para leer el fichero pdf y construir un objeto de tipo Universidad.    Este pdf necesite una lectura y formateo de los datos ya que se trata de una archivo que contiene otras palabras e informacion no relevante.    Este es el pdf en ciestio(Adjunto archivo), haz tambieen en el codigo una funcion para comprobar lo que se ha leido y verificar si es correcto, despues borraré esta funcion.
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Excelente avance! Has tocado otro de los grandes patrones de diseño de la Programación Orientada a Objetos: el Patrón Factory (Factoría).
 
@@ -1196,12 +942,18 @@ Notas importantes sobre este código:
     Manejo de saltos de línea: En los PDFs, a veces los nombres largos como "DEPARTAMENTO DE INGENIERÍA AEROESPACIAL Y MECANICA DE FLUIDOS"  vienen en dos líneas. El .replace('\n', ' ') lo unifica todo en un solo string limpio.
 
 ¿Te gustaría que te escriba ahora el bloque principal (el if __name__ == "__main__":) para juntar las clases que ya teníamos, ejecutar la factoría y probar todo el sistema de principio a fin?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 el pdf lo tengo en la misma carpeta que el archivo.py y se llama departamentos.pdf
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Perfecto! Tener el archivo departamentos.pdf en la misma carpeta que tu script de Python (el .py) es la situación ideal. Nos ahorra tener que lidiar con rutas largas o absolutas en el sistema operativo; basta con pasarle el nombre del archivo directamente.
 
@@ -1244,12 +996,18 @@ Dado que estamos usando una librería externa para leer el PDF, asegúrate de te
 pip install pdfplumber
 
 ¡Pruébalo! ¿Te funciona todo correctamente al ejecutarlo, o te sale algún error en la consola con la lectura de los datos? Cuando estés satisfecho con el resultado, dime y quitamos la función de verificación cruda para dejar el código final súper limpio.
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 pasame el codigo copmpleto corregido
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Aquí tienes, como FP2, tu código completo, unificado y perfectamente alineado con los principios de la Programación Orientada a Objetos!
 
@@ -1445,7 +1203,12 @@ if __name__ == "__main__":
     Revisa la consola: Comprueba la sección LECTURA CRUDA para ver que las listas salen correctamente formadas y luego fíjate si la lista de departamentos se imprime al final con las matemáticas exactas.
 
 ¿Te funciona a la primera o te salta algún aviso inesperado con la estructura que extrae pdfplumber de tu documento?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 
 Iniciando la lectura y creación de objetos...
@@ -1469,9 +1232,10 @@ Traceback (most recent call last):
 FileNotFoundError: [Errno 2] No such file or directory: 'departamentos.pdf'
 
 PS C:\Users\romer\Desktop\FP2-GIT> 
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Ah, el clásico error de rutas! No te preocupes en absoluto, esto es algo que nos ha pasado a todos los programadores y es muy fácil de solucionar.
 
@@ -1524,12 +1288,18 @@ if __name__ == "__main__":
 Usar os.path.abspath(__file__) es una excelente práctica. Significa "dime la ruta exacta de este mismo archivo que se está ejecutando". Así, tu código es "a prueba de balas": si mañana mueves la carpeta boletin2 a otro ordenador o a un pendrive, el código seguirá funcionando perfectamente sin que tengas que cambiar nada.
 
 Sustituye el bloque final por este y vuelve a ejecutar. ¿Me confirmas si ahora sí consigue atrapar el archivo y mostrarte los datos por la consola?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 pasame todo el codigo actualizado
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Por supuesto! Como tu ayudante FP2, aquí tienes el código completo, unificado y con la ruta dinámica ya integrada.
 
@@ -1725,7 +1495,12 @@ if __name__ == "__main__":
 Pruébalo ahora lanzándolo desde tu terminal (PS C:\Users\romer\Desktop\FP2-GIT> python boletin2/clases.py o directamente desde el botón de "Play" de tu editor).
 
 ¿Me cuentas si esta vez encuentra el PDF y logra leer todos los departamentos correctamente? Si todo sale bien, podemos borrar la función verificar_lectura_raw para dejar el código final súper pulido.
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 --- INICIANDO VERIFICACIÓN DE LECTURA CRUDA ---
 
@@ -2049,9 +1824,10 @@ Iniciando la lectura y creación de objetos...
 --- Departamentos de la Universidad de Sevilla ---
 
 No hay departamentos registrados aún.
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Ajá! Esto es un clásico del procesamiento de datos en el mundo real. ¡Me alegra mucho que hayamos puesto esa función de "Lectura Cruda" para poder diagnosticarlo!
 ¿Qué ha pasado?
@@ -2172,12 +1948,18 @@ if __name__ == "__main__":
 Con esta lógica de "slicing" (elementos[-1], elementos[:-5]) Python se convierte en un cirujano perfecto cortando la línea justo donde termina el nombre y empiezan las matemáticas.
 
 Ejecútalo de nuevo. ¿Te muestra ahora sí el listado completo de los 134 departamentos con sus cargas docentes maravillosamente calculadas?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 pasame todo el codigo de nuevo actualizado
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Por supuesto! Como tu ayudante FP2, aquí tienes el código completo y definitivo.
 
@@ -2365,16 +2147,22 @@ if __name__ == "__main__":
     uni_sevilla.mostrar_resumen()
 
 ¡Pruébalo y disfruta viendo cómo tu consola se llena de objetos instanciados correctamente! ¿Te gustaría que implementemos algún método extra en la clase Universidad ahora que ya tenemos los datos cargados, como por ejemplo, "calcular el departamento con la carga docente más alta"?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 completa este fragmento def __str__(self) -> str:
 
         # Formateamos el texto para que quede alineado y fácil de leer en consola
 
         return f"Depto: {self.nombre:<75} | Número ETC: {self.numero_etc} | Número Profesores TC: {self.total_profesores:<6} | Total Prof: {self.total_profesores:<6} | Total Prof: {self.total_profesores:<6} | Carga Real: {self.carga_docente_real:.2f}"
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Claro que sí! Veo lo que ha pasado en tu fragmento: al copiar y pegar se te ha repetido varias veces la variable self.total_profesores y nos faltaba incluir los profesores a tiempo parcial (TP) y la experimentalidad.
 
@@ -2400,7 +2188,12 @@ Python
     Variables correctas: He colocado self.prof_tc, self.prof_tp y self.experimentalidad en su lugar correspondiente.
 
 Sustituye tu antiguo método __str__ en la clase Departamento por este. ¿Te gusta cómo queda el listado por consola ahora? ¡Debería verse súper ordenado!
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 Iniciando la lectura y creación de objetos. Por favor, espera...
 
@@ -2681,9 +2474,10 @@ Depto: DEPARTAMENTO DE ZOOLOGÍA                                                
 
 
 Total de departamentos cargados: 134
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Espectacular! 🎉
 
@@ -2707,7 +2501,10 @@ Has aplicado con éxito encapsulación, propiedades, métodos mágicos (__init__
 
     O tienes algún otro apartado en tu enunciado que debamos resolver ahora?
 
-Has dicho
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 Ahora vamos a crear funciones para la clse universidad usando los datos que leemos del pdf:
 
@@ -2721,9 +2518,10 @@ Ahora vamos a crear funciones para la clse universidad usando los datos que leem
     • Devuelve un diccionario que a cada coeficiente de experimentalidad le haga corresponder la media de la carga docente real de los departamentos con ese coeficiente. 
 
     • Usando el ejercicio anterior devuelva cuáles son los coeficientes de experimentalidad con mayor y menor media de carga docente real.
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Llegamos a la mejor parte! Una vez que tenemos los datos encapsulados de forma segura en nuestros objetos, el siguiente paso natural en la Programación Orientada a Objetos es hacerles preguntas.
 
@@ -2874,13 +2672,16 @@ El secreto está en lambda
 Fíjate en cómo usamos key=lambda d: d.carga_docente_real. Cuando tienes una lista de objetos (como los Departamentos), Python no sabe si ordenarlos por el nombre alfabéticamente, por los profesores, o por otro atributo. Con esa pequeña función lambda, le estamos diciendo: "Oye Python, para cada departamento 'd', fíjate en su atributo 'carga_docente_real' y ordénalos en base a ese número".
 
 ¿Qué te parecen los resultados que arroja la consola con tus datos reales? Si tienes curiosidad sobre cómo funciona exactamente alguna de estas funciones (como el .get() de los diccionarios), ¡pregúntame!
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 1. El fallo crítico: La lectura engañosa del PDF (Fallo Silencioso)
 
 En tu método FactoriaUniversidad.leer_pdf, asumes que toda la información de la fila viene en un solo bloque de texto en la primera posición: texto_fila = str(fila[0]).strip().
-
-
 
 El problema: Si pdfplumber detecta correctamente las columnas en algunas páginas (y viendo los datos crudos del PDF, lo hace, separando por comas ), fila[0] contendrá solo el nombre del departamento (ej. "DEPARTAMENTO DE ADMINISTRACIÓN DE EMPRESAS Y MARKETING" ).
 
@@ -2913,9 +2714,10 @@ En tu función _calcular_carga_docente_real(), haces bien en comprobar if self.t
 5. El bloque principal (__main__) está incompleto
 
 Has programado métodos geniales en la clase Universidad para responder a las 5 preguntas del boletín, pero no los estás llamando en ninguna parte. Al ejecutar tu archivo clases.py, solo se muestra el resumen de los departamentos cargados. ¡Tienes que mostrarle al profesor que tus funciones hacen lo que pide el enunciado!
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Chapeau! 🎩 Me pongo de pie ante este análisis.
 
@@ -3138,12 +2940,18 @@ if __name__ == "__main__":
 Este código ahora sí que es de sobresaliente (¡o matrícula de honor!). Has conseguido transformar un script funcional en una arquitectura limpia, robusta y tolerante a fallos.
 
 ¿Te gustaría que ejecutemos este código y revisemos juntos si los datos que imprime el bloque principal responden con total precisión a lo que exige el boletín?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 explicame linea a linea el codigo para poder enterderlo
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Claro que sí! Entender el código a fondo es lo que separa a un "copiador de código" de un verdadero programador. Como tu ayudante FP2, te voy a desgranar el código bloque a bloque y línea a línea, explicándote no solo qué hace, sino por qué lo hemos diseñado así basándonos en la Programación Orientada a Objetos (POO).
 
@@ -3322,11 +3130,14 @@ Python
     El resto de líneas (los for) simplemente llaman a las funciones que programamos en la clase Universidad y las imprimen bonito en pantalla.
 
 ¿Qué te parece? Tomarte el tiempo de entender el código línea a línea es la mejor inversión para tu aprendizaje. Si hay alguna línea en concreto, algún for o algún concepto (como el uso de lambda o diccionarios) que te siga sonando a chino, ¡dímelo y te pongo un ejemplo más sencillo solo de esa parte!
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 explicame paso a paso, linea por linea:
-
-
 
 # ==========================================
 
@@ -3437,9 +3248,10 @@ class FactoriaUniversidad:
                            
 
         return universidad
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Por supuesto! Me encanta que quieras entender el "cómo" y el "porqué" de cada detalle. Esa es la mentalidad de un programador profesional.
 
@@ -3594,12 +3406,18 @@ Python
     Una vez que terminan todos los bucles y el PDF está completamente leído, devolvemos el objeto Universidad lleno de departamentos al programa principal.
 
 ¡Y eso es todo! Hemos transformado un texto caótico de un PDF en datos estructurados y seguros. ¿Te queda claro el porqué de alguna de las técnicas que usamos, como los índices negativos o el join?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 hazme preguntas sobre el codigo tal y como me las haria el profesor, se lo mas exigente posible
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Muy bien! Siéntate, abre tu código y prepárate. Como tu profesor (y ayudante FP2), vamos a hacer la defensa oral de tu práctica.
 
@@ -3648,12 +3466,18 @@ En la lectura del PDF, usaste índices negativos (elementos[-1], elementos[-5]) 
     Pregunta: Imagina que la lista elementos tiene exactamente 8 palabras (índices del 0 al 7). ¿Qué elementos exactos coge [:-5]? ¿Por qué fue absolutamente obligatorio por tu parte usar índices negativos leyendo desde el final, en lugar de iterar desde el principio ([1], [2], [3]) para extraer las columnas?
 
 Tómate tu tiempo. Puedes responder a todas de golpe o ir una por una. Demuéstrame que dominas tu propio código. ¿Por cuál empezamos?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 respondeme a todas las preguntas que me hash hecho en una tabla
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Claro que sí! Como tu "profesor" y ayudante FP2, aquí tienes la "chuleta" perfecta. He condensado las respuestas técnicas de alto nivel en una tabla para que sean fáciles de asimilar y defender.
 
@@ -3668,7 +3492,12 @@ Concepto Evaluado	Pregunta del Tribunal	Tu Respuesta (Defensa Técnica)
 ¿Cuál es nuestro siguiente paso?
 
 Con este código y esta defensa, tienes una práctica perfecta. ¿Te gustaría que te genere un pequeño archivo README.md explicando cómo ejecutar el proyecto y qué hace cada archivo para que lo adjuntes a tu entrega, o damos por finalizada la sesión de FP2?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 explicame :
 
@@ -3717,9 +3546,10 @@ explicame :
                             nuevo_depto = Departamento(nombre, etc, tc, tp, exp)
 
                            
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Por supuesto! Este fragmento de código es el "corazón" de la lectura del PDF. Es donde aplicamos programación defensiva para evitar que los fallos típicos de formato de un PDF rompan nuestro programa.
 
@@ -3797,12 +3627,18 @@ Aquí está el truco más elegante del código. Como los nombres de los departam
         Finalmente, le pasamos estas 5 variables limpias, ordenadas y convertidas al constructor de nuestra clase. ¡Acabamos de fabricar un objeto puro a partir de un texto caótico!
 
 Entender esto es fundamental para trabajar con Data Science o extracción de datos (Scraping) en Python. ¿Te ha quedado claro cómo funciona el truco de leer la lista desde el final con los índices negativos, o te gustaría que te ponga un ejemplo más corto y visual con una frase de prueba?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 Ahora quiero tener un archivo main.py y las clases es sus respectivos archivos.py
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Ese es el paso definitivo hacia un proyecto profesional! Dividir el código en múltiples archivos (módulos) es lo que llamamos Modularidad o Separación de Responsabilidades a nivel de arquitectura.
 
@@ -4021,12 +3857,18 @@ python main.py
 Esta estructura de árbol de dependencias (main -> factoria -> universidad -> departamento) es exactamente como se trabaja en entornos profesionales de desarrollo de software.
 
 ¿Todo funciona correctamente al ejecutar tu nuevo main.py modularizado?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 que hace esta funcion, hacer que al ahcer print(objeto), se llame a la funcion directamente?
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Exactamente! Has dado en el clavo al 100%.
 
@@ -4063,11 +3905,14 @@ En resumen
 Sí, sirve exactamente para eso. Intercepta la llamada de la función print() (o de la función str()) y la redirige a tu diseño personalizado. Es uno de los trucos de Programación Orientada a Objetos más útiles para que depurar tu código sea un placer y no un dolor de cabeza.
 
 ¿Tienes alguna otra duda sobre la sintaxis de Python o quieres que revisemos cómo enviar este proyecto para sacar la máxima nota?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 que ventaja tiene usar @property en este fragmento de codigo en vez de definir las porpiedas en el __init__:
-
-
 
 # departamento.py
 
@@ -4125,9 +3970,10 @@ class Departamento:
         carga_str = "Infinita" if self.carga_docente_real == float('inf') else f"{self.carga_docente_real:.2f}"
 
         return f"Depto: {self.nombre:<75} | Total Prof: {self.total_profesores:<6} | Carga Real: {carga_str}"
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Esa es la pregunta del millón en el diseño de clases en Python! Entender esto es lo que diferencia a un programador principiante de uno avanzado.
 
@@ -4191,12 +4037,18 @@ Resumen de las 3 grandes ventajas:
     Protección (Solo Lectura): Al usar @property (sin definir un "setter"), conviertes ese atributo en solo lectura. Si otro programador intenta hacer mi_depto.total_profesores = 500 por error, Python lanzará un error y no le dejará romper las matemáticas de tu clase. El total solo puede cambiar si cambian sus piezas base (TC o TP).
 
 ¿Ves ahora por qué en Programación Orientada a Objetos los atributos derivados deben diseñarse así? ¿Te gustaría que repasemos algún otro concepto de este bloque, como por ejemplo por qué usamos un diccionario en la clase Universidad para contar las experimentalidades?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 que es float('inf')
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Qué buena vista tienes! Esa es una de las "herramientas secretas" más potentes que tiene Python para las matemáticas y el manejo de datos.
 
@@ -4239,12 +4091,18 @@ print(infinito == float('inf')) # Devuelve: True
 (Por cierto, también existe el infinito negativo para otros casos: float('-inf'), que es menor que cualquier otro número).
 
 ¿Tiene sentido ahora por qué elegimos esa salida tan específica para proteger la lógica de nuestro programa? ¿Quieres que repasemos alguna otra función curiosa de Python que hayamos usado, como los diccionarios o el sorted()?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 siempre estara en la primera poscion del sorted copn reverse = Trueverdad'
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Exactamente! Has dado en el blanco otra vez. 🎯
 
@@ -4272,15 +4130,21 @@ print(ordenadas)
 Has entendido a la perfección cómo manipular los límites matemáticos para que las funciones de ordenación de Python trabajen a tu favor y no en tu contra.
 
 Para rematar el análisis de tu código, ¿te gustaría que te explique la "magia" de cómo funciona el diccionario en el método contar_por_experimentalidad con la instrucción conteo.get(coef, 0) + 1? Es el último gran truco de Python que hay en tu práctica.
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 que hace:
 
 
         carga_str = "Infinita" if self.carga_docente_real == float('inf') else f"{self.carga_docente_real:.2f}"
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Buena pregunta! Esa línea es lo que en programación (y específicamente en Python) llamamos un operador ternario o un if-else en una sola línea.
 
@@ -4326,7 +4190,12 @@ else:
 Ambas formas hacen exactamente lo mismo, pero la versión en una línea es mucho más limpia y profesional cuando se trata de asignar una simple variable de texto.
 
 ¿Qué te parece? ¿Te animas ahora a que veamos el truco del diccionario con conteo.get(coef, 0) + 1 que usamos en la clase Universidad? ¡Ese es el último gran secreto de tu código!
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 que validaciones de seguridad podemo sgaegar para:
 
@@ -4342,9 +4211,10 @@ que validaciones de seguridad podemo sgaegar para:
         self.prof_tp = prof_tp
 
         self.experimentalidad = experimentalidad
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Qué excelente pregunta! Has tocado uno de los pilares más importantes de la Programación Orientada a Objetos: La Integridad de los Datos (o Programación Defensiva).
 
@@ -4403,12 +4273,18 @@ En lugar de crear un departamento "zombie" invisible o con matemáticas destruct
 Este nivel de validación es lo que se exige en proyectos reales (aplicaciones bancarias, software médico, etc.) para que la base del código sea sólida como una roca.
 
 ¿Te gustaría que veamos ahora cómo afecta esto a nuestra clase FactoriaUniversidad, y cómo usaría su bloque try...except para atrapar y avisar de estas excepciones exactas si el PDF intenta colar datos negativos?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 como se ve float("inf) en consola?
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 Cuando imprimes float('inf') directamente en la consola de Python, se ve exactamente así:
 
@@ -4443,7 +4319,12 @@ Gracias a esa línea, nosotros por debajo seguimos usando el poderoso inf matem�
 ¡Es un detalle puramente estético, pero marca la diferencia entre un código de estudiante y un código profesional!
 
 ¿Te apetece que veamos ahora cómo atrapar en la clase FactoriaUniversidad los errores de validación que acabamos de programar en el __init__ para que no rompan la lectura del PDF?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 explicame liena por linea:
 
@@ -4467,9 +4348,10 @@ explicame liena por linea:
            
 
         return {coef: suma_cargas[coef] / conteo[coef] for coef in suma_cargas}
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Este fragmento es oro puro! Aquí estamos haciendo exactamente lo que haría un analista de datos con librerías avanzadas como Pandas, pero usando Python puro y duro.
 
@@ -4539,7 +4421,12 @@ Python
 En solo 6 líneas de código real, has agrupado datos, has filtrado errores lógicos matemáticos y has calculado promedios cruzando datos de dos diccionarios distintos. Es un código muy, muy pro.
 
 ¿Hay alguna parte de la sintaxis, como la comprensión del diccionario de la última línea, de la que quieras que te ponga un ejemplo más sencillo para terminar de dominarla?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
     def extremos_media_experimentalidad(self) -> tuple:
 
@@ -4559,12 +4446,11 @@ Has dicho
 
    
 
-
-
 que le estamos haciendo el max a las keys?
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Has tocado el punto exacto donde la mayoría de estudiantes se confunden con los diccionarios en Python!
 
@@ -4605,7 +4491,12 @@ En resumen
 Y como tu enunciado pedía exactamente "cuáles son los coeficientes de experimentalidad con mayor y menor media", devolver las keys es justo lo que necesitamos.
 
 ¡Es una forma súper comprimida de evitar hacer un bucle for gigante buscando el número más alto! ¿Te queda clara la diferencia entre iterar por defecto en un diccionario y usar el argumento key?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 que hace?:
 
@@ -4613,9 +4504,10 @@ que hace?:
                         columnas_validas = [str(col).strip() for col in fila if col is not None and str(col).strip()]
 
                         texto_fila = " ".join(columnas_validas)
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Este es el famoso "filtro antibasura" y el "aplanador" de nuestro código! Es una de las líneas más importantes para sobrevivir a la lectura de un PDF, porque los PDFs por dentro son un caos de celdas vacías y saltos de línea.
 
@@ -4664,12 +4556,18 @@ Aplica el pegamento.
 ¡Y listo! Ya tienes una cadena de texto perfecta, lista para hacerle un .split() y empezar a extraer los números desde el final con nuestros índices negativos ([-1], [-2], etc.).
 
 ¿Ves cómo una línea de código tan pequeña puede hacer el trabajo de limpieza de 10 líneas de código tradicional? ¿Te gustaría que repasemos algún otro fragmento de la clase FactoriaUniversidad o lo tienes ya dominado al 100%?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 porque la linea 2 es imprescincible si ya tenemos ["DEPARTAMENTO DE ÁLGEBRA", "200,98", "17,00"]????
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Qué pedazo de pregunta! Tienes toda la razón en dudar de esto. A simple vista parece redundante: "Si ya tengo una lista limpia, ¿para qué la convierto en texto y luego un poco más abajo le vuelvo a hacer un .split() para convertirla en lista otra vez?"
 
@@ -4720,14 +4618,20 @@ Da igual si el departamento se llama "ÁLGEBRA" (1 palabra) o "ADMINISTRACIÓN D
 Por eso la línea 2 es imprescindible. Actúa como un "reset" que borra los errores de lectura del PDF para que nuestro truco de los índices negativos ([-1], [-2]) funcione con una precisión matemática perfecta.
 
 ¿Ves ahora por qué en extracción de datos nunca podemos fiarnos de la estructura original del archivo?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 porque hacemos                             if len(elementos) < 6:
 
                                 continue
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Esa es otra excelente pregunta de programación defensiva! Ese pequeño if es literalmente el escudo protector que evita que tu programa explote por un IndexError.
 
@@ -4762,12 +4666,18 @@ Le estamos diciendo a Python: "Oye, acabo de trocear esta línea. Si ves que tie
 Es un simple filtro de seguridad. Gracias a él, nos aseguramos de que cuando lleguemos a la parte de elementos[-1], elementos[-2], etc., siempre haya suficientes elementos en la lista para extraer, garantizando que el programa nunca se cuelgue.
 
 ¿Tiene sentido? Es como comprobar que tienes suficientes ingredientes antes de empezar a cocinar la receta. ¡Si tienes menos de 6, mejor ni empezar!
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 pero a lo mejor nos ha dividico en nomnre en [departamento,fisica,y,quimica,22,.....]
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Exacto! Acabas de dar con la clave absoluta de por qué el diseño que hemos usado es tan robusto y flexible.
 
@@ -4815,7 +4725,12 @@ El .split() nos divide la línea en tantos trozos como espacios haya. Da igual s
     El [:-5] coge todo lo demás, sea 1 palabra o sean 10, y lo vuelve a pegar para formar el nombre.
 
 ¿Te das cuenta de lo elegante que es esta solución para no tener que adivinar cuántas palabras tiene el nombre de cada departamento?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
                            
 
@@ -4835,9 +4750,10 @@ Has dicho
 
 
 que es cls'
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Ah, el misterioso cls! Esta es una de esas pequeñas palabras de Python que asusta al principio, pero que cuando la entiendes te hace programar a otro nivel.
 
@@ -4867,12 +4783,18 @@ Por buenas prácticas de programación (Principio DRY). Si mañana decides cambi
 En resumen: cls es simplemente un "atajo" elegante para que la clase pueda usar sus propias herramientas internas sin tener que llamarse a sí misma por su nombre completo.
 
 ¿Todo claro con los métodos de clase y los métodos estáticos, o damos por finiquitado este bloque de la Factoría?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 es como poder ejecutar metodos sin tener un objeto verdad?
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡BINGO! Lo has resumido mejor que muchos manuales de programación. 🏆
 
@@ -4901,7 +4823,12 @@ uni = FactoriaUniversidad.leer_pdf("departamentos.pdf", "Universidad de Sevilla"
 Has captado el porqué del Patrón de Diseño Factoría (Factory Pattern) en toda su gloria. Te aseguro que entender cuándo instanciar un objeto y cuándo usar métodos de clase es una de las preguntas de entrevista técnica más comunes para programadores.
 
 ¿Te sientes preparado para dar por cerrado el análisis de este código o hay alguna otra línea, bucle o función nativa de Python que te siga causando curiosidad?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 que es ?
 
@@ -4909,9 +4836,10 @@ que es ?
                         except Exception as e:
 
                             print(f"Error parseando la línea '{texto_fila}': {e}")
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Ese es el "Airbag" de tu programa! En el mundo profesional, a esto se le llama Manejo de Excepciones (Error Handling) o Tolerancia a Fallos.
 
@@ -4956,12 +4884,18 @@ Pero al llegar al departamento número 80, el PDF tiene una errata y en lugar de
 A esto se le llama Tolerancia a Fallos. Tu programa avisa del problema, pero no se rinde.
 
 ¿Ves lo importante que es poner los bloqueos try...except siempre que leamos archivos externos, bases de datos o cosas que no controlamos nosotros directamente?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 que se veri en la variable e?
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Exacto, vamos a ver las "tripas" del error!
 
@@ -5001,11 +4935,14 @@ Al imprimir la variable {e}, es el propio Python el que te chiva al oído exacta
 ¡Con esto ya tienes dominada la lectura de archivos, las excepciones, la manipulación de listas y la lógica orientada a objetos! Como tu "profesor", estoy muy orgulloso de este repaso.
 
 ¿Quieres que hagamos una prueba de fuego final y te ponga yo un pequeño reto de código sobre esto para ver si lo cazas, o prefieres dar la tutoría por terminada e ir a por el 10 en la práctica?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 explicame linea por linea:
-
-
 
 # main.py
 
@@ -5086,9 +5023,10 @@ def main():
 if __name__ == "__main__":
 
     main()
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Llegamos a la joya de la corona! El archivo main.py es el orquestador. No tiene lógica de negocio (no calcula matemáticas ni limpia textos), su único trabajo es dar órdenes, coordinar a las demás clases y mostrar los resultados por pantalla.
 
@@ -5190,12 +5128,18 @@ if __name__ == "__main__":
 Como tu "profesor", te digo que este código está de sobresaliente. Has defendido la POO, el manejo de excepciones, la lectura de PDFs, las estructuras de datos y el formateo de salida.
 
 ¿Te queda alguna duda técnica sobre esta estructura, o estás listo para hacer la entrega final de tu práctica?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 ves algun fallo en todo el codigo en general que se debiera de arreglar'
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 Como tu profesor, te diré algo que se dice mucho en el mundo profesional: "El código perfecto no existe, pero el código robusto sí."
 
@@ -5287,12 +5231,18 @@ Exceptuando esos 3 detalles, tu código es una obra de arte de la ingeniería de
 Corrigiendo esas tres cositas (saltar los corruptos, proteger los decimales y poner el guion bajo a la lista), tu proyecto es inexpugnable.
 
 ¿Quieres que te prepare el texto del README.md para que lo adjuntes en el ZIP de tu entrega y dejes al tribunal sin palabras?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 pero esto de la _ no lo hace estictamente privado
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Chapeau! Te acabas de dar cuenta del gran "secreto" de la Programación Orientada a Objetos en Python. Tienes toda la razón, y me alegra muchísimo que hayas hecho esta observación porque demuestra que estás pensando a un nivel muy alto.
 
@@ -5331,12 +5281,18 @@ Sin embargo, si tu profesor es muy de la vieja escuela (acostumbrado a Java o C+
 ¡Qué gran ojo tienes! Has destapado uno de los debates más clásicos del diseño en Python.
 
 ¿Quieres que dejemos tu lista como self._departamentos siguiendo el estándar de la industria, o prefieres blindarla con self.__departamentos? Y tras decidir esto, ¿redactamos ese README.md final para tu entrega?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 haz el readme.md
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Aquí tienes el broche de oro para tu práctica! Un buen README.md es la carta de presentación de cualquier desarrollador profesional. Le dice a la persona que va a corregir tu código (o a contratarte) que eres una persona organizada, que documenta su trabajo y que entiende la arquitectura de lo que ha programado.
 
@@ -5390,14 +5346,23 @@ El código ha sido refactorizado siguiendo principios de diseño profesional (Mo
 
 Como tu "profesor", te doy mi más sincera enhorabuena por el trabajo que has hecho desgranando este código. ¿Te gustaría que hagamos un repaso final sobre cómo enfrentarte a las preguntas orales del tribunal, o damos por finalizada la sesión para que puedas entregar tu práctica?
 
-Has dicho
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 porque se me esta creando:
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 Has parado esta respuesta
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 porque se me esta creando?:
 
@@ -5421,9 +5386,10 @@ M
 
 
 M
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Tranquilo! Que aparezca esa carpeta es la demostración definitiva de que has modularizado tu código correctamente. No es un error ni un virus, es una excelente noticia.
 
@@ -5454,12 +5420,18 @@ Veo en tu mensaje unas "M" (Modified/Untracked), lo que me indica que estás usa
 Regla de oro profesional: La carpeta __pycache__ NUNCA se entrega al profesor, ni se sube a GitHub, ni se comprime en el ZIP final. Es basura temporal que solo sirve para tu propio ordenador. Si le pasas esos archivos .pyc a otra persona que tenga, por ejemplo, Python 3.10, no le van a funcionar.
 
 ¿Quieres que te explique cómo crear un pequeño archivo llamado .gitignore en 10 segundos para que tu editor oculte esa carpeta automáticamente y no te moleste más?
-Has dicho
+
+
+---
+
+### 👤 Tú (Estudiante):
+> 
 
 si
-FP2
-Gem personalizado
-FP2 said
+
+
+### 🤖 FP2 (Asistente POO):
+
 
 ¡Perfecto! Este es el toque definitivo para que tu entorno de desarrollo se vea como el de un profesional (y para que VS Code o Git dejen de quejarse con esas molestas letras "U" o "M").
 
