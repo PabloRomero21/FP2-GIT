@@ -6,23 +6,23 @@ class Universidad:
     
     def __init__(self, nombre: str):
         self.nombre = nombre
-        self.departamentos = []
+        self._departamentos = []
 
     def agregar_departamento(self, departamento: Departamento):
         if isinstance(departamento, Departamento):
-            self.departamentos.append(departamento)
+            self._departamentos.append(departamento)
         else:
             raise TypeError("El objeto a insertar debe ser de la clase Departamento")
 
     def top_n_mayor_carga(self, n: int) -> list:
-        return sorted(self.departamentos, key=lambda d: d.carga_docente_real, reverse=True)[:n]
+        return sorted(self._departamentos, key=lambda d: d.carga_docente_real, reverse=True)[:n]
 
     def top_n_menor_carga(self, n: int) -> list:
-        return sorted(self.departamentos, key=lambda d: d.carga_docente_real)[:n]
+        return sorted(self._departamentos, key=lambda d: d.carga_docente_real)[:n]
 
     def contar_por_experimentalidad(self) -> dict:
         conteo = {}
-        for depto in self.departamentos:
+        for depto in self._departamentos:
             coef = depto.experimentalidad
             conteo[coef] = conteo.get(coef, 0) + 1
         return conteo
@@ -31,7 +31,7 @@ class Universidad:
         suma_cargas = {}
         conteo = self.contar_por_experimentalidad()
         
-        for depto in self.departamentos:
+        for depto in self._departamentos:
             coef = depto.experimentalidad
             if depto.carga_docente_real != float('inf'):
                 suma_cargas[coef] = suma_cargas.get(coef, 0.0) + depto.carga_docente_real
@@ -46,3 +46,6 @@ class Universidad:
         coef_mayor = max(medias, key=medias.get)
         coef_menor = min(medias, key=medias.get)
         return coef_mayor, coef_menor
+    
+
+

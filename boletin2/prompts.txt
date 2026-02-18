@@ -219,3 +219,13 @@
 5
 
     Ahora quiero tener un archivo main.py y las clases es sus respectivos archivos.py
+
+6 
+    Que validaciones de seguridad podemos agaregar para: 
+
+    def __init__(self, nombre: str, numero_etc: float, prof_tc: float, prof_tp: float, experimentalidad: float):
+        self.nombre = nombre
+        self.numero_etc = numero_etc
+        self.prof_tc = prof_tc
+        self.prof_tp = prof_tp
+        self.experimentalidad = experimentalidad

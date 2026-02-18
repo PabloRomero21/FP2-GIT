@@ -11,7 +11,8 @@ class FactoriaUniversidad:
         if not texto: return 0.0
         texto = str(texto).strip()
         if texto in ("", "-"): return 0.0
-        texto = texto.replace('.', '').replace(',', '.')
+        if ',' in texto:
+            texto = texto.replace('.', '').replace(',', '.')
         try: return float(texto)
         except ValueError: return 0.0
 
@@ -44,9 +45,10 @@ class FactoriaUniversidad:
                             nuevo_depto = Departamento(nombre, etc, tc, tp, exp)
                             
                             if not nuevo_depto.es_integro(total_pdf):
-                                print(f"⚠️ AVISO LECTURA: Los datos de '{nombre}' están corruptos en el PDF.")
+                                print(f"AVISO LECTURA: Los datos de '{nombre}' están corruptos en el PDF.")
+                                continue
                             
-                            universidad.agregar_departamento(nuevo_depto)
+                            universidad.agregar_departamento(nuevo_depto) 
                             
                         except Exception as e:
                             print(f"Error parseando la línea '{texto_fila}': {e}")

@@ -1,0 +1,4 @@
+# Archivos compilados y caché temporal de Python
+__pycache__/
+*.pyc
+*.pyo
