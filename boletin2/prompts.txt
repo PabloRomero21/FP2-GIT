@@ -215,3 +215,7 @@
         • Devuelve un diccionario con el número de departamentos de cada coeficiente de experimentalidad.
         • Devuelve un diccionario que a cada coeficiente de experimentalidad le haga corresponder la media de la carga docente real de los departamentos con ese coeficiente. 
         • Usando el ejercicio anterior devuelva cuáles son los coeficientes de experimentalidad con mayor y menor media de carga docente real.
+
+5
+
+    Ahora quiero tener un archivo main.py y las clases es sus respectivos archivos.py
