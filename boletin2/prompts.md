@@ -826,7 +826,7 @@ class Universidad:
 ### 👤 Tú (Estudiante):
 > 
 
-    Ahora necesito una clase Factoria para leer el fichero pdf y construir un objeto de tipo Universidad.    Este pdf necesite una lectura y formateo de los datos ya que se trata de una archivo que contiene otras palabras e informacion no relevante.    Este es el pdf en ciestio(Adjunto archivo), haz tambieen en el codigo una funcion para comprobar lo que se ha leido y verificar si es correcto, despues borraré esta funcion.
+    Ahora necesito una clase Factoria para leer el fichero pdf y construir un objeto de tipo Universidad.    Este pdf necesite una lectura y formateo de los datos ya que se trata de una archivo que contiene otras palabras e informacion no relevante.    Este es el pdf en cuestion(Adjunto archivo), haz tambieen en el codigo una funcion para comprobar lo que se ha leido y verificar si es correcto, despues borraré esta funcion.
 
 
 ### 🤖 FP2 (Asistente POO):
@@ -1501,6 +1501,8 @@ Pruébalo ahora lanzándolo desde tu terminal (PS C:\Users\romer\Desktop\FP2-GIT
 
 ### 👤 Tú (Estudiante):
 > 
+
+Esta detectando cabeceros y pies de paginas y junta todos los datos en una unica posicion de la lista.
 
 --- INICIANDO VERIFICACIÓN DE LECTURA CRUDA ---
 
