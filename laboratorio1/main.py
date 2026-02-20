@@ -51,7 +51,7 @@ def main():
     # 5. PRUEBA DE K-VECINOS
     k = 3
     print(f"\n[PASO 3] Buscando los {k} vecinos más cercanos:")
-    indices = objetivo.k_vecinos(lista_de_registros, k)
+    indices = objetivo.k_vecinos(lista_de_registros,k, tipo = "manhattan")
     print(f"   - Índices encontrados: {indices}")
     
     for idx in indices:
