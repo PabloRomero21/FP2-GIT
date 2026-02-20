@@ -43,7 +43,8 @@ def main():
 
     # 4. PRUEBA DE NORMALIZACIÓN
     print("\n[PASO 2] Probando Normalización:")
-    minimos, maximos = [0.0]*4, [100.0]*4
+    minimos, maximos = [7.2645, 27.6930, 33.5719, 8.4280], [98.0224, 76.1602, 97.5021, 90.1265]
+
     reg_norm = otro.normalizar(minimos, maximos)
     print(f"   - Original:    {otro}")
     print(f"   - Normalizado: {reg_norm}")
