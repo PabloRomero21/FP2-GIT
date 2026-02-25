@@ -2,7 +2,7 @@
 import pdfplumber
 from departamento import Departamento
 
-class FactoriaUniversidad:
+class Factoriapdf:
     """Factoría que lee el PDF y fabrica los objetos Departamento base."""
 
     @staticmethod

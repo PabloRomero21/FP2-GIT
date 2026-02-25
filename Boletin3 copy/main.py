@@ -1,7 +1,7 @@
 # main.py
 import os
-from factoriauniversidad import FactoriaUniversidad
-from factoria import Factoria
+from factoriapdf import Factoriapdf
+from factoriafacultad import FactoriaFacultad
 from universidad import Universidad
 
 def main():
@@ -10,11 +10,11 @@ def main():
     
     # 1. Extraer materia prima (Lectura del PDF)
     print("Iniciando la lectura del PDF...")
-    departamentos_sueltos = FactoriaUniversidad.extraer_departamentos_pdf(archivo_pdf)
+    departamentos_sueltos = Factoriapdf.extraer_departamentos_pdf(archivo_pdf)
     
     # 2. Construir Facultades cruzando con la Web (Scraping)
     print("Iniciando el cruce de datos con la Web (Scraping)...")
-    lista_facultades = Factoria.construir_facultades(departamentos_sueltos)
+    lista_facultades = FactoriaFacultad.construir_facultades(departamentos_sueltos)
     
     # 3. Ensamblar la Universidad
     uni_sevilla = Universidad("Universidad de Sevilla")

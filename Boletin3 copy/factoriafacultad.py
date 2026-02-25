@@ -7,7 +7,7 @@ import time
 from facultad import Facultad
 from departamento import Departamento
 
-class Factoria:
+class FactoriaFacultad:
     """Factoría encargada de construir las Facultades cruzando datos mediante Web Scraping."""
 
     @staticmethod
