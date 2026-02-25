@@ -1,0 +1,72 @@
+Ahora quiero otro archivo que se llamara factoriadepartamento.py ,este archivo se encargara de construir objetos tipo facultad con sus respectivos departamentos.
+
+
+Esta factoria lo que hace es:
+
+
+1)Recibe una lista de objetos tipo departamento
+2)Recorre esa lista departamento a departamento
+3)Toma el nombre del departamento y lo normaliza de este modo:
+
+-DEPARTAMENTO DE ADMINISTRACIÓN DE EMPRESAS Y MARKETING -> administración-de-empresas-y-marketing
+-DEPARTAMENTO DE TEORÍA E HISTORIA DE LA EDUCACIÓN Y PEDAGOGÍA SOCIAL -> teoría-e-historia-de-la-educación-y-pedagogía-social
+
+-En resumen, tiene que convertir todo el texto en minusculas, quitar (departamento de), eliminar los espacios del pricipio y el final si los hubiera y sustituir los espacios por -
+
+4)Toma este nombre normalizado y lo pega en esta direccion: https://www.us.es/centros/departamentos/
+
+Ejemplo:    
+
+-https://www.us.es/centros/departamentos/teoria-e-historia-de-la-educacion-y-pedagogia-social
+-https://www.us.es/centros/departamentos/administracion-de-empresas-y-marketing
+
+5)Ir a esa página web
+6)Analizar la pagina web con un codigo parecido a este:
+
+import requests
+from bs4 import BeautifulSoup
+
+def ver_que_ve_python():
+    """Script exploratorio para extraer la sede de un departamento concreto."""
+    
+    url = "https://www.us.es/centros/departamentos/administracion-de-empresas-y-marketing"
+    
+    print(f"Haciendo la petición a: {url}...")
+    
+    # 1. Realizamos la petición HTTP GET
+    respuesta = requests.get(url)
+    
+    # 2. Verificamos que la página existe (Código 200)
+    if respuesta.status_code == 200:
+        print("✅ ¡Conexión exitosa! Analizando el HTML...\n")
+        
+        # 3. Pasamos el texto HTML a BeautifulSoup
+        sopa = BeautifulSoup(respuesta.text, 'html.parser')
+        
+        print("=== EXTRACCIÓN PRECISA DE LA SEDE ===")
+        
+        # 4. Buscamos la etiqueta <h3> que contiene exactamente el texto "Sede"
+        etiqueta_sede = sopa.find('h3', string='Sede')
+        
+        if etiqueta_sede:
+            # 5. Buscamos el primer enlace (etiqueta <a>) que aparezca DESPUÉS de ese <h3>
+            enlace_facultad = etiqueta_sede.find_next('a')
+            
+            if enlace_facultad:
+                # Extraemos el texto limpio
+                nombre_facultad = enlace_facultad.text.strip()
+                print(f"✅ Sede extraída con éxito: {nombre_facultad}")
+            else:
+                print("❌ Se encontró 'Sede', pero no había ningún enlace con el nombre de la facultad.")
+        else:
+            print("❌ No se encontró la etiqueta <h3>Sede</h3> en esta página.")
+                
+    else:
+        print(f"❌ Error al conectar. Código: {respuesta.status_code}")
+
+if __name__ == "__main__":
+    ver_que_ve_python()
+
+9)Crear un objeto Facultad que tenga por nombre (nombre_facultad) y añadimos el correspondiente objeto de tipo departamento a su lista dedepartamentos. Para ello vamos a usar un diccionario en que en cada iteración iremos completando,
+ las claves seran los objetos facultad y los valores seran la lista de departamentos, es decir, self.departamentos, del objeto facultad. Antes de crear un objeto facultad debemos comprobrar que este no se ha creado anteriormente. Si ya se ha creado, simplemente 
+ añadimos el departamento de la iteracion a los departamentos del objeto facultad ya existente.

@@ -1,36 +1,39 @@
-
-# universidad.py
+# facultad.py
 from departamento import Departamento
 
-class Universidad:
+class Facultad:
+    """Clase que representa un centro o facultad. Contiene departamentos."""
+    
     def __init__(self, nombre: str):
         self.nombre = nombre
-        self._departamentos = []  # Departamentos sueltos (del PDF)
-        self._facultades = []     # NUEVO: Lista de facultades estructuradas
+        self._departamentos = []
 
-    def agregar_facultad(self, facultad: 'Facultad'):
-        """Añade un objeto Facultad a la lista de la universidad."""
-        self._facultades.append(facultad)
-
-    def generar_diccionario_extremos_sedes(self) -> dict:
-        """
-        Crea y devuelve el diccionario de extremos usando la lista interna de facultades.
-        """
-        diccionario_extremos = {}
-
-        # Iteramos sobre nuestra propia lista de facultades
-        for facultad in self._facultades:
-            # Llamamos al método de la Facultad
-            extremos = facultad.obtener_extremos_carga() 
-            diccionario_extremos[facultad.nombre] = extremos
-
-        return diccionario_extremos
     def agregar_departamento(self, departamento: Departamento):
+        """Añade un departamento a la facultad."""
         if isinstance(departamento, Departamento):
             self._departamentos.append(departamento)
         else:
-            raise TypeError("El objeto a insertar debe ser de la clase Departamento")
+            raise TypeError("Solo se pueden añadir objetos Departamento.")
 
+    def obtener_extremos_carga(self) -> tuple:
+        """Devuelve una tupla con (Depto_Mayor_Carga, Depto_Menor_Carga)."""
+        if not self._departamentos:
+            return None, None
+            
+        depto_mayor = max(self._departamentos, key=lambda d: d.carga_docente_real)
+        depto_menor = min(self._departamentos, key=lambda d: d.carga_docente_real)
+        
+        return depto_mayor, depto_menor
+
+    def __str__(self) -> str:
+        resultado = f"=== SEDE: {self.nombre} ===\n"
+        if not self._departamentos:
+            resultado += "  [!] No hay departamentos asignados a esta facultad.\n"
+        else:
+            for depto in self._departamentos:
+                resultado += f"    - {depto.nombre}\n"
+        return resultado
+    
     def top_n_mayor_carga(self, n: int) -> list:
         return sorted(self._departamentos, key=lambda d: d.carga_docente_real, reverse=True)[:n]
 
@@ -63,7 +66,3 @@ class Universidad:
         coef_mayor = max(medias, key=medias.get)
         coef_menor = min(medias, key=medias.get)
         return coef_mayor, coef_menor
-
-    
-
-

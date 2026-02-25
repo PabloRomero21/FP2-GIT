@@ -1,38 +1,41 @@
+# main.py
 import os
-from factoriauniversidad import FactoriaUniversidad 
-from factoriafacultad import FactoriaFacultad
+from factoriauniversidad import FactoriaUniversidad
+from factoria import Factoria
+from universidad import Universidad
 
 def main():
-    # 1. Calculamos la ruta segura del PDF
     directorio_actual = os.path.dirname(os.path.abspath(__file__))
     archivo_pdf = os.path.join(directorio_actual, "departamentos.pdf")
     
-    # 2. Fabricamos la universidad (Lectura del PDF)
+    # 1. Extraer materia prima (Lectura del PDF)
     print("Iniciando la lectura del PDF...")
-    uni = FactoriaUniversidad.leer_pdf(archivo_pdf, "Universidad de Sevilla")
-    print(f"✅ Se han cargado {len(uni._departamentos)} departamentos del PDF.\n")
+    departamentos_sueltos = FactoriaUniversidad.extraer_departamentos_pdf(archivo_pdf)
     
-    # 3. Fabricamos las Facultades (Web Scraping)
+    # 2. Construir Facultades cruzando con la Web (Scraping)
     print("Iniciando el cruce de datos con la Web (Scraping)...")
-    # Este proceso crea los objetos Facultad y les asigna sus Departamentos
-    diccionario_facultades = FactoriaFacultad.construir_facultades(uni._departamentos)
+    lista_facultades = Factoria.construir_facultades(departamentos_sueltos)
     
-    # 4. Imprimimos el resultado final con el formato del Boletín 3
+    # 3. Ensamblar la Universidad
+    uni_sevilla = Universidad("Universidad de Sevilla")
+    for facultad in lista_facultades:
+        uni_sevilla.agregar_facultad(facultad)
+        
+    # 4. Imprimir resultados (Requisito Boletín 3)
     print("\n=================================================================")
     print("🎓 EXTREMOS DE CARGA DOCENTE POR SEDE (RESULTADO BOLETÍN 3) 🎓")
     print("=================================================================\n")
-
-    diccionario_extremos = uni.generar_diccionario_extremos_sedes()
-    # 5. Mostramos la información de forma legible
+    
+    diccionario_extremos = uni_sevilla.generar_diccionario_extremos_sedes()
+    
     for sede, tupla_deptos in diccionario_extremos.items():
         depto_mayor, depto_menor = tupla_deptos
         
         print(f"Sede: {sede}")
         
         if depto_mayor and depto_menor:
-            # Formateamos los números a 2 decimales para que queden profesionales
-            c_max = f"{depto_mayor.carga_docente_real:.2f}"
-            c_min = f"{depto_menor.carga_docente_real:.2f}"
+            c_max = f"{depto_mayor.carga_docente_real:.2f}" if depto_mayor.carga_docente_real != float('inf') else "Inf"
+            c_min = f"{depto_menor.carga_docente_real:.2f}" if depto_menor.carga_docente_real != float('inf') else "Inf"
             
             print(f"  Departamento con MAYOR carga: {depto_mayor.nombre} (Carga: {c_max})")
             print(f"  Departamento con MENOR carga: {depto_menor.nombre} (Carga: {c_min})")
@@ -43,6 +46,5 @@ def main():
 
     print("\n✅ Proceso finalizado con éxito.")
 
-# Punto de ejecución
 if __name__ == "__main__":
     main()
