@@ -31,9 +31,16 @@ class FactoriaFacultad:
 
     @staticmethod
     def _asignar_facultad(departamento: Departamento, nombre_sede: str, registro: dict):
+        """Asigna el departamento a la facultad y actualiza el atributo sede del departamento."""
+        # 1. Si la facultad no existe en nuestro registro, la creamos
         if nombre_sede not in registro:
             registro[nombre_sede] = Facultad(nombre_sede)
+            
+        # 2. Metemos el departamento dentro de la lista de la facultad
         registro[nombre_sede].agregar_departamento(departamento)
+        
+        # 3. NUEVO: Le inyectamos el nombre de la sede al propio objeto Departamento
+        departamento.sede = nombre_sede
 
     @classmethod
     def construir_facultades(cls, lista_departamentos: list) -> list:

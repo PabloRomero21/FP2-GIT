@@ -29,6 +29,7 @@ class Departamento:
         self.prof_tc = float(prof_tc)
         self.prof_tp = float(prof_tp)
         self.experimentalidad = float(experimentalidad)
+        self.sede = None
 
         
     @property

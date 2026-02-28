@@ -66,3 +66,27 @@ class Facultad:
         coef_mayor = max(medias, key=medias.get)
         coef_menor = min(medias, key=medias.get)
         return coef_mayor, coef_menor
+    
+    def calcular_media_ponderada_carga(self) -> float:
+            """
+            Calcula la media ponderada: 
+            Suma de (carga_docente * numero_profesores) / Suma total de profesores de la sede
+            """
+            suma_productos = 0.0
+            total_profesores_sede = 0.0
+            
+            for depto in self._departamentos:
+                n_profesores = depto.total_profesores
+                carga = depto.carga_docente_real
+                
+                # Si hay profesores, sumamos el producto. 
+                # Si n_profesores es 0, el producto es 0 (no aporta a la media)
+                if n_profesores > 0:
+                    # Matemáticamente: (ETC * Exp / Prof) * Prof  => ETC * Exp
+                    suma_productos += (carga * n_profesores)
+                    total_profesores_sede += n_profesores
+                    
+            if total_profesores_sede == 0:
+                return 0.0
+                
+            return suma_productos / total_profesores_sede

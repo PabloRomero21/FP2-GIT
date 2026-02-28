@@ -18,6 +18,16 @@ class Universidad:
             extremos = facultad.obtener_extremos_carga() 
             diccionario_extremos[facultad.nombre] = extremos
         return diccionario_extremos
+    
+    def generar_diccionario_medias_ponderadas(self) -> dict:
+            """
+            Devuelve el diccionario con la media ponderada de carga por sede.
+            """
+            diccionario_medias = {}
+            for facultad in self._facultades:
+                media = facultad.calcular_media_ponderada_carga()
+                diccionario_medias[facultad.nombre] = media
+            return diccionario_medias
 
     
 

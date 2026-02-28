@@ -44,6 +44,18 @@ def main():
             
         print("-" * 75)
 
+    
+
+
+    print("\n" + "="*75)
+    print("📊 MEDIA PONDERADA DE CARGA DOCENTE POR SEDE (BOLETÍN 3)")
+    print("="*75)
+    
+    medias = uni_sevilla.generar_diccionario_medias_ponderadas()
+    for sede, valor in medias.items():
+        print(f"📍 {sede:<60} | Media: {valor:>6.2f}")
+
+
     print("\n✅ Proceso finalizado con éxito.")
 
 if __name__ == "__main__":
