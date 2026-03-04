@@ -238,28 +238,6 @@ class Liga:
     
     
 
-    def obtener_partidos_por_equipo(self, datos_busqueda: tuple) -> int:
-        # Desempaquetamos la tupla
-        nombre_jugador, nombre_equipo = datos_busqueda
-        nombre_buscado = nombre_jugador.upper()
-        
-        # Si el jugador no existe, devolvemos 0
-        if nombre_buscado not in self.jugadores:
-            return 0
-            
-        jugador = self.jugadores[nombre_buscado]
-        total_partidos = 0
-        
-        # Recorremos las estadísticas y sumamos solo si coincide el equipo
-        for est in jugador.estadisticas:
-            # Comparamos pasando a mayúsculas por si hay diferencias de texto
-            if est.equipo.upper() == nombre_equipo.upper():
-                total_partidos += est.pjugados
-                
-        # Devolvemos el resultado sin decimales
-        return int(total_partidos)
-    
-
     def obtener_tarjetas_equipo_temporada(self, equipo: str, temporada: str) -> int:
         total_tarjetas = 0
         equipo_buscado = equipo.upper()
@@ -455,3 +433,34 @@ class Liga:
         ranking_eficiencia.sort(key=lambda x: x['ratio'])
         
         return ranking_eficiencia[:n]
+
+
+    def obtener_top_jugadores_íntegros(self, n: int) -> list:
+        ranking = []
+        
+        for nombre, jugador in self.jugadores.items():
+            total_partidos_desde_1980 = 0
+            es_integro = True
+            jugo_desde_1980 = False
+            
+            for est in jugador.estadisticas:
+                try:
+                    anio = int(str(est.temporada)[:4])
+                    
+                    if anio >= 1980:
+                        jugo_desde_1980 = True
+                        # Si en cualquier momento desde 1980 no es titular o no termina...
+                        if not (est.pjugados == est.ptitular == est.pcompletos):
+                            es_integro = False
+                            break
+                        total_partidos_desde_1980 += est.pjugados
+                except ValueError:
+                    continue
+            
+            # Solo aceptamos si jugó en esa época y nunca falló en su "integridad"
+            if jugo_desde_1980 and es_integro and total_partidos_desde_1980 > 0:
+                ranking.append((nombre, int(total_partidos_desde_1980)))
+        
+        # Ordenamos de mayor a menor
+        ranking.sort(key=lambda x: x[1], reverse=True)
+        return ranking[:n]

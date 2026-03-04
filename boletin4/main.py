@@ -116,26 +116,14 @@ def main():
     print("\n")
 
 
-    # --- EJERCICIO 9 ---
+# --- EJERCICIO 17 (Jugadores íntegros) ---
     print("---EJERCICIO 9---")
     
-    # Preparamos una lista con las tres tuplas exactas que nos has dado
-    busquedas = [
-        ("N'KONO", "R.C.D. Espanyol"),
-        ("ESNAOLA", "REAL SOCIEDAD"),
-        ("MATE", "RC CELTA DE VIGO")
-    ]
+    resultados = la_liga.obtener_top_jugadores_íntegros(3)
     
-    # Recorremos la lista
-    for tupla in busquedas:
-        nombre_jugador = tupla[0] # Sacamos el nombre para imprimirlo luego
-        
-        # Le pasamos la tupla entera a tu nueva función
-        partidos = la_liga.obtener_partidos_por_equipo(tupla)
-        
-        # Imprimimos el resultado calcando el formato que necesitas
-        print(f"- {nombre_jugador}: {partidos} partidos enteros jugados.")
-        
+    for nombre, partidos in resultados:
+        print(f"- {nombre}: {partidos} partidos enteros jugados.")
+            
     print("\n")
 
 
@@ -249,6 +237,11 @@ def main():
         print(f"- {r['nombre']}: {r['goles']} goles. Marca un gol cada {r['ratio']:.1f} minutos.")
             
     print("\n")
+
+
+
+
+
 
 if __name__ == "__main__":
     main()
