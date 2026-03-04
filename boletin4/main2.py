@@ -181,22 +181,151 @@ def main():
     print("\n")
 
 
-# --- EJERCICIO 18 (Goles por décadas - Prioridad Cantidad) ---
+# --- EJERCICIO 18 (Goles por décadas - Formato Boletín) ---
     print("--- EJERCICIO 18 (GOLES POR DÉCADAS) ---")
     
-    # Solicitamos el top 5 del boletín
-    resultados_ej18 = la_liga.obtener_jugadores_goles_decadas_top(5)
+    # Pedimos los 5 que aparecen en el PDF 
+    resultados_ej18 = la_liga.obtener_jugadores_goles_decadas_exacto(5)
     
     for r in resultados_ej18:
         decadas_str = ", ".join(map(str, r['decadas']))
         
-        # Formateo manual para coincidir con el recorte del PDF en Unamuno
-        nombre_imp = r['nombre']
-        if "UNAMUNO" in nombre_imp:
-            nombre_imp = "VICT. UNAMUNO"
+        # Ajuste de nombres específicos del boletín [cite: 68, 70, 71]
+        nombre_final = r['nombre']
+        if "UNAMUNO" in nombre_final: nombre_final = "VICT. UNAMUNO"
+        if "BIENZOBAS" in nombre_final: nombre_final = "P. BIENZOBAS"
+        
+        print(f"- {nombre_final}: Goles en {r['num_decadas']} décadas distintas ({decadas_str}).")
             
-        print(f"- {nombre_imp}: Goles en {r['num_decadas']} décadas distintas ({decadas_str}).")
+    print("\n")
+
+    # --- EJERCICIO 19 (Equipos descendidos) ---
+    print("--- EJERCICIO 19 (DESCENSOS POR TEMPORADA) ---")
+    
+    temporadas_consulta = ["1950-51", "1953-54", "1955-56", "1961-62", "1962-63", "1964-65", "1988-89", "1996-97", "1998-99"]
+
+    
+    for temp in temporadas_consulta:
+        descendidos = la_liga.obtener_descendidos(temp)
+        if descendidos:
+            lista_str = ", ".join(descendidos)
+            print(f"- Temporada {temp}: Descendieron {len(descendidos)} equipos: {lista_str}")
             
+    print("\n")
+
+
+    # --- NUEVO EJERCICIO (Equipos con más descensos) ---
+    print("--- TOP EQUIPOS CON MÁS DESCENSOS ---")
+    
+    # Llamamos al método indicando que queremos el top 3 (n=3)
+    # la_liga es tu objeto principal que ya está cargado en el main
+    resultado_descensos = la_liga.obtener_equipos_mas_descendidos(3)
+    
+    # Como el método ya devuelve el String formateado con los saltos de línea,
+    # solo tenemos que imprimirlo directamente.
+    print(resultado_descensos)
+            
+    print("\n")
+
+
+    # --- NUEVO EJERCICIO (Equipos Ascendidos) ---
+    print("--- EQUIPOS ASCENDIDOS POR TEMPORADA ---")
+    
+    # Lista con las temporadas exactas que quieres comprobar
+    temporadas_ascensos = [
+        "1941-42", "1950-51", "1951-52", "1954-55", 
+        "1956-57", "1962-63", "1963-64", "1965-66", 
+        "1971-72", "1989-90", "1999-00"
+    ]
+    
+    for temp in temporadas_ascensos:
+        ascendidos = la_liga.obtener_ascendidos(temp)
+        
+        if ascendidos:
+            # Unimos los nombres con comas
+            equipos_str = ", ".join(ascendidos)
+            print(f"- Temporada {temp}: Ascendieron {len(ascendidos)} equipos: {equipos_str}")
+            
+    print("\n")
+
+
+    # --- NUEVO EJERCICIO (Equipos con más ascensos históricos) ---
+    print("--- TOP EQUIPOS CON MÁS ASCENSOS ---")
+    
+    # Llamamos al método pidiendo el top 1 (o los que quieras)
+    resultado_ascensos = la_liga.obtener_equipos_mas_ascendidos(1)
+    
+    print(resultado_ascensos)
+    print("\n")
+
+
+    # --- NUEVO EJERCICIO (Equipos con más temporadas en Primera) ---
+    print("--- TOP EQUIPOS CON MÁS TEMPORADAS EN PRIMERA ---")
+    
+    # Llamamos al método pidiendo los 10 primeros (n=10)
+    resultado_temporadas = la_liga.obtener_equipos_mas_temporadas(10)
+    
+    print(resultado_temporadas)
+    print("\n")
+
+
+    # --- NUEVO EJERCICIO (Equipos con menos temporadas en Primera) ---
+    print("--- EQUIPOS CON MENOS TEMPORADAS EN PRIMERA ---")
+    
+    # Llamamos al método pidiendo los 10 con menos apariciones (n=10)
+    resultado_menos_temporadas = la_liga.obtener_equipos_menos_temporadas(10)
+    
+    print(resultado_menos_temporadas)
+    print("\n")
+
+
+    # --- NUEVO EJERCICIO (Equipos con más goles en la historia) ---
+    print("--- TOP EQUIPOS CON MÁS GOLES EN LA HISTORIA ---")
+    
+    # Llamamos al método pidiendo los 10 primeros (n=10)
+    resultado_mas_goles = la_liga.obtener_equipos_mas_goles(10)
+    
+    print(resultado_mas_goles)
+    print("\n")
+
+
+    # --- NUEVO EJERCICIO (Equipos con menos goles en la historia) ---
+    print("--- EQUIPOS CON MENOS GOLES EN LA HISTORIA ---")
+    
+    # Llamamos al método pidiendo los 10 con menos goles (n=10)
+    resultado_menos_goles = la_liga.obtener_equipos_menos_goles(10)
+    
+    print(resultado_menos_goles)
+    print("\n")
+
+
+    # --- NUEVO EJERCICIO (Temporadas con mejor ratio de goles) ---
+    print("--- TEMPORADAS CON MEJOR RATIO GOLES/PARTIDO ---")
+    
+    # Llamamos al método pidiendo el top 12 (n=12)
+    resultado_ratios = la_liga.obtener_mejores_temporadas_ratio_goles(12)
+    
+    print(resultado_ratios)
+    print("\n")
+
+
+    # --- NUEVO EJERCICIO (Empates en el equipo más goleador de la temporada) ---
+    print("--- TEMPORADAS CON EMPATE AL EQUIPO MÁS GOLEADOR ---")
+    
+    # Llamamos al método
+    resultado_empates = la_liga.obtener_empates_equipos_mas_goles()
+    
+    print(resultado_empates)
+    print("\n")
+
+
+    # --- NUEVO EJERCICIO (Mayores rachas como máximo goleador) ---
+    print("--- EQUIPOS CON MAYOR RACHA SIENDO MÁXIMO GOLEADOR ---")
+    
+    # Llamamos al método pidiendo el top 3 (n=3)
+    resultado_rachas = la_liga.obtener_rachas_maximo_goleador(3)
+    
+    print(resultado_rachas)
     print("\n")
 
 if __name__ == "__main__":
