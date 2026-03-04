@@ -119,7 +119,7 @@ def main():
     print("Ejercicio 9")
     
     # Pedimos los 3 primeros
-    top_completos = la_liga.obtener_jugadores_menos_lesiones_mas_partidos(15)
+    top_completos = la_liga.obtener_top_jugadores_partidos_enteros(15)
 
     for jug_obj, num_completos in top_completos:
         print(f"- {jug_obj.nombre}: {num_completos} partidos enteros jugados.")

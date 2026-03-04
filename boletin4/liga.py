@@ -235,22 +235,25 @@ class Liga:
 
         return resultado[:n]
     
-    def obtener_jugadores_menos_lesiones_mas_partidos(self, n: int):
+    def obtener_top_jugadores_partidos_enteros(self, n: int):
+        """
+        Ejercicio 9: Jugadores con más partidos enteros jugados.
+        Condición estricta: NUNCA fueron sustituidos, suplentes ni expulsados.
+        Por tanto, Total Partidos Jugados == Total Partidos Completos.
+        """
         ranking = []
 
         for jugador in self.jugadores.values():
-            # Sumamos totales de este jugador
+            # Sumamos los totales de la carrera del jugador
             t_jugados = sum(est.pjugados for est in jugador.estadisticas)
-            t_lesiones = sum(est.lesiones for est in jugador.estadisticas) 
+            t_completos = sum(est.pcompletos for est in jugador.estadisticas)
             
-            # Solo metemos a los que hayan jugado algo
-            if t_jugados > 0:
-                ranking.append((jugador, int(t_lesiones), int(t_jugados)))
+            # LA CONDICIÓN DE ORO: Todo lo que jugó, lo jugó entero.
+            if t_jugados > 0 and t_jugados == t_completos:
+                ranking.append((jugador, int(t_completos)))
 
-        # LA CLAVE DE LA ORDENACIÓN MÚLTIPLE:
-        # x[1] son las lesiones (de menos a más)
-        # -x[2] son los partidos jugados (el menos indica de más a menos)
-        ranking.sort(key=lambda x: (x[1], -x[2]))
+        # Ordenamos de mayor a menor según los partidos completos
+        ranking.sort(key=lambda x: x[1], reverse=True)
 
         return ranking[:n]
 
