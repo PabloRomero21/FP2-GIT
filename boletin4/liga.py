@@ -235,26 +235,223 @@ class Liga:
 
         return resultado[:n]
     
-    def obtener_top_jugadores_partidos_enteros(self, n: int):
-        """
-        Ejercicio 9: Jugadores con más partidos enteros jugados.
-        Condición estricta: NUNCA fueron sustituidos, suplentes ni expulsados.
-        Por tanto, Total Partidos Jugados == Total Partidos Completos.
-        """
-        ranking = []
+    
+    
 
-        for jugador in self.jugadores.values():
-            # Sumamos los totales de la carrera del jugador
-            t_jugados = sum(est.pjugados for est in jugador.estadisticas)
-            t_completos = sum(est.pcompletos for est in jugador.estadisticas)
+    def obtener_partidos_por_equipo(self, datos_busqueda: tuple) -> int:
+        # Desempaquetamos la tupla
+        nombre_jugador, nombre_equipo = datos_busqueda
+        nombre_buscado = nombre_jugador.upper()
+        
+        # Si el jugador no existe, devolvemos 0
+        if nombre_buscado not in self.jugadores:
+            return 0
             
-            # LA CONDICIÓN DE ORO: Todo lo que jugó, lo jugó entero.
-            if t_jugados > 0 and t_jugados == t_completos:
-                ranking.append((jugador, int(t_completos)))
+        jugador = self.jugadores[nombre_buscado]
+        total_partidos = 0
+        
+        # Recorremos las estadísticas y sumamos solo si coincide el equipo
+        for est in jugador.estadisticas:
+            # Comparamos pasando a mayúsculas por si hay diferencias de texto
+            if est.equipo.upper() == nombre_equipo.upper():
+                total_partidos += est.pjugados
+                
+        # Devolvemos el resultado sin decimales
+        return int(total_partidos)
+    
 
-        # Ordenamos de mayor a menor según los partidos completos
-        ranking.sort(key=lambda x: x[1], reverse=True)
+    def obtener_tarjetas_equipo_temporada(self, equipo: str, temporada: str) -> int:
+        total_tarjetas = 0
+        equipo_buscado = equipo.upper()
+        
+        # Recorremos todos los jugadores del diccionario
+        for jugador in self.jugadores.values():
+            # Recorremos las estadísticas de cada jugador
+            for est in jugador.estadisticas:
+                # Comparamos equipo y temporada (lo pasamos a string y mayúsculas por seguridad)
+                if est.equipo.upper() == equipo_buscado and str(est.temporada) == str(temporada):
+                    
+                    # OJO AQUÍ: Asumo que en tu clase tienes est.amarillas y est.rojas. 
+                    # Si tienes un solo atributo llamado est.tarjetas, pon solo ese.
+                    total_tarjetas += (est.tarjetas + est.expulsiones)
+                    
+        return int(total_tarjetas)
+    
 
-        return ranking[:n]
+    def obtener_revulsivos(self, lista_jugadores: list) -> dict:
+        resultados = {}
+        
+        for nombre in lista_jugadores:
+            nombre_buscado = nombre.upper()
+            
+            if nombre_buscado not in self.jugadores:
+                continue
+                
+            jugador = self.jugadores[nombre_buscado]
+            total_goles = 0
+            total_minutos = 0
+            
+            # Recorremos y sumamos los goles y minutos totales con tus atributos exactos
+            for est in jugador.estadisticas:
+                total_goles += est.goles
+                total_minutos += est.minutos
+                
+            # Calculamos el ratio si ha marcado algún gol
+            if total_goles > 0:
+                minutos_por_gol = int(total_minutos / total_goles)
+                # Guardamos la dupla (goles, minutos_por_gol)
+                resultados[nombre] = (int(total_goles), minutos_por_gol)
+                
+        return resultados
+    
+    def obtener_top_jugadores_mas_temporadas(self, n: int) -> list:
+        lista_activos = []
+        
+        for nombre, jugador in self.jugadores.items():
+            if not jugador.estadisticas:
+                continue
+                
+            anios_inicio = []
+            
+            # Sacamos el año de inicio de todas las temporadas que jugó
+            for est in jugador.estadisticas:
+                try:
+                    # Convertimos a string y cogemos los 4 primeros caracteres (ej: "1983")
+                    anio = int(str(est.temporada)[:4])
+                    anios_inicio.append(anio)
+                except ValueError:
+                    continue # Por si hubiera alguna fila en blanco o mal formada
+                    
+            if not anios_inicio:
+                continue
+                
+            # Buscamos su primer y último año
+            min_anio = min(anios_inicio)
+            max_anio = max(anios_inicio)
+            
+            # La fórmula del profesor: (Año de su última temporada) - (Año de su primera)
+            anios_activo = max_anio - min_anio
+            
+            # El año en que se retira es el año de inicio de su última temporada + 1
+            anio_fin_texto = max_anio + 1
+            
+            # Guardamos todos los datos que necesitamos para imprimir
+            lista_activos.append((nombre, anios_activo, min_anio, anio_fin_texto))
+            
+        # Ordenamos de mayor a menor por los años en activo (índice 1 de la tupla)
+        lista_activos.sort(key=lambda x: x[1], reverse=True)
+        
+        return lista_activos[:n]
+    
 
 
+    def obtener_top_jugadores_impolutos(self, n: int) -> list:
+        lista_resultados = []
+        
+        for nombre, jugador in self.jugadores.items():
+            total_partidos_desde_1980 = 0
+            total_tarjetas_desde_1980 = 0
+            jugo_desde_1980 = False
+            
+            for est in jugador.estadisticas:
+                try:
+                    anio = int(str(est.temporada)[:4])
+                    
+                    # Solo nos interesan datos de 1980 en adelante
+                    if anio >= 1980:
+                        jugo_desde_1980 = True
+                        total_partidos_desde_1980 += est.pjugados
+                        # Sumamos todas las tarjetas que ha visto desde 1980
+                        total_tarjetas_desde_1980 += (est.tarjetas + est.expulsiones)
+                        
+                except ValueError:
+                    continue
+            
+            # LA REGLA DE ORO: 
+            # 1. Tiene que haber jugado desde 1980.
+            # 2. El TOTAL de sus tarjetas desde 1980 tiene que ser CERO.
+            if jugo_desde_1980 and total_tarjetas_desde_1980 == 0 and total_partidos_desde_1980 > 0:
+                lista_resultados.append((nombre, int(total_partidos_desde_1980)))
+                
+        # Ordenamos de mayor a menor por los partidos acumulados
+        lista_resultados.sort(key=lambda x: x[1], reverse=True)
+        
+        return lista_resultados[:n]
+    
+    def obtener_top_jugadores_sustituidos(self, n: int) -> list:
+        lista_sustituidos = []
+        
+        for nombre, jugador in self.jugadores.items():
+            total_cambios = 0
+            
+            for est in jugador.estadisticas:
+                # Lógica: Si eres titular y no lo acabas, es que te han cambiado
+                # Ajusta 'ptitular' y 'pcompletos' si en tu clase se llaman distinto
+                try:
+                    cambios_esta_temporada = est.ptitular - est.pcompletos
+                    if cambios_esta_temporada > 0:
+                        total_cambios += cambios_esta_temporada
+                except AttributeError:
+                    # Si esto falla, es que tus atributos se llaman de otra forma
+                    # Podrían ser: est.p_titular, est.p_completos, etc.
+                    continue
+            
+            if total_cambios > 0:
+                lista_sustituidos.append((nombre, int(total_cambios)))
+                
+        # Ordenamos de mayor a menor
+        lista_sustituidos.sort(key=lambda x: x[1], reverse=True)
+        
+        return lista_sustituidos[:n]
+    
+
+    def obtener_top_goleadores_unicos(self, n: int) -> list:
+        jugadores_una_sola_vez = []
+        
+        for nombre, jugador in self.jugadores.items():
+            # 1. Buscamos todas las temporadas donde MARCO algún gol
+            temporadas_con_goles = [est for est in jugador.estadisticas if est.goles > 0]
+            
+            # 2. Solo nos interesan si marcaron en EXACTAMENTE UNA temporada
+            if len(temporadas_con_goles) == 1:
+                est = temporadas_con_goles[0]
+                
+                jugadores_una_sola_vez.append({
+                    'nombre': nombre,
+                    'goles': int(est.goles),
+                    'temporada': est.temporada
+                })
+        
+        # 3. Ordenamos por goles de mayor a menor
+        jugadores_una_sola_vez.sort(key=lambda x: x['goles'], reverse=True)
+        
+        return jugadores_una_sola_vez[:n]
+    
+
+
+    def obtener_top_eficiencia_goleadora(self, n: int) -> list:
+        ranking_eficiencia = []
+        
+        for nombre, jugador in self.jugadores.items():
+            total_goles = 0
+            total_minutos = 0
+            
+            for est in jugador.estadisticas:
+                total_goles += est.goles
+                total_minutos += est.minutos
+            
+            # Filtramos para que tengan al menos 50 goles (como Iriondo O.)
+            # y evitamos división por cero
+            if total_goles >= 50:
+                ratio = total_minutos / total_goles
+                ranking_eficiencia.append({
+                    'nombre': nombre,
+                    'goles': int(total_goles),
+                    'ratio': ratio
+                })
+        
+        # En este caso, ordenamos de MENOR a MAYOR ratio 
+        # (porque cuanto menos minutos tardes en marcar, mejor eres)
+        ranking_eficiencia.sort(key=lambda x: x['ratio'])
+        
+        return ranking_eficiencia[:n]
