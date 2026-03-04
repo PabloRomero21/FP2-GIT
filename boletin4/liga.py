@@ -464,3 +464,61 @@ class Liga:
         # Ordenamos de mayor a menor
         ranking.sort(key=lambda x: x[1], reverse=True)
         return ranking[:n]
+
+
+    def obtener_top_jugadores_sin_gol(self, n: int) -> list:
+        ranking = []
+        
+        for nombre, jugador in self.jugadores.items():
+            total_goles = 0
+            total_completos = 0
+            
+            for est in jugador.estadisticas:
+                total_goles += est.goles
+                total_completos += est.pcompletos
+            
+            # Solo nos interesan jugadores que NUNCA han marcado
+            if total_goles == 0 and total_completos > 0:
+                ranking.append({
+                    'nombre': nombre,
+                    'completos': int(total_completos)
+                })
+        
+        # Ordenamos de mayor a menor por partidos completos
+        ranking.sort(key=lambda x: x['completos'], reverse=True)
+        
+        return ranking[:n]
+    
+
+    def obtener_jugadores_goles_decadas_top(self, n: int) -> list:
+        ranking = []
+        
+        for nombre, jugador in self.jugadores.items():
+            decadas_con_gol = set()
+            
+            for est in jugador.estadisticas:
+                if est.goles > 0:
+                    try:
+                        # Extraemos el año de la temporada (ej: "1928-29" -> 1928)
+                        anio = int(str(est.temporada)[:4])
+                        decada = (anio // 10) * 10
+                        decadas_con_gol.add(decada)
+                    except (ValueError, IndexError):
+                        continue
+            
+            if decadas_con_gol:
+                decadas_lista = sorted(list(decadas_con_gol))
+                ranking.append({
+                    'nombre': nombre,
+                    'num_decadas': len(decadas_lista),
+                    'decadas': decadas_lista,
+                    'primera_decada': decadas_lista[0]
+                })
+        
+        # ORDENACIÓN POR PRIORIDADES:
+        # 1º num_decadas (descendente: -x)
+        # 2º primera_decada (ascendente: x)
+        # 3º nombre (ascendente: x)
+        ranking.sort(key=lambda x: (-x['num_decadas'], x['primera_decada'], x['nombre']))
+        
+        return ranking[:n]

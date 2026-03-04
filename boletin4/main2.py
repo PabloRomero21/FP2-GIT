@@ -167,5 +167,37 @@ def main():
         print(f"- {r['nombre']}: {r['goles']} goles. Marca un gol cada {r['ratio']:.1f} minutos.")
     print("\n")
 
+
+    # --- EJERCICIO 17 (Sequía goleadora / Porteros) ---
+    print("--- EJERCICIO 17 (MÁS PARTIDOS SIN MARCAR) ---")
+    
+    top_n = 3
+    resultados_ej17 = la_liga.obtener_top_jugadores_sin_gol(top_n)
+    
+    for r in resultados_ej17:
+        # Formato exacto del boletín: "...partidos enteros sin celebrar un gol."
+        print(f"- {r['nombre']}: {r['completos']} partidos enteros sin celebrar un gol.")
+            
+    print("\n")
+
+
+# --- EJERCICIO 18 (Goles por décadas - Prioridad Cantidad) ---
+    print("--- EJERCICIO 18 (GOLES POR DÉCADAS) ---")
+    
+    # Solicitamos el top 5 del boletín
+    resultados_ej18 = la_liga.obtener_jugadores_goles_decadas_top(5)
+    
+    for r in resultados_ej18:
+        decadas_str = ", ".join(map(str, r['decadas']))
+        
+        # Formateo manual para coincidir con el recorte del PDF en Unamuno
+        nombre_imp = r['nombre']
+        if "UNAMUNO" in nombre_imp:
+            nombre_imp = "VICT. UNAMUNO"
+            
+        print(f"- {nombre_imp}: Goles en {r['num_decadas']} décadas distintas ({decadas_str}).")
+            
+    print("\n")
+
 if __name__ == "__main__":
     main()
