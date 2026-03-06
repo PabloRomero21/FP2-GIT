@@ -116,15 +116,130 @@ def main():
     print("\n")
 
 
-    print("Ejercicio 9")
+# --- EJERCICIO 17 (Jugadores íntegros) ---
+    print("---EJERCICIO 9---")
     
-    # Pedimos los 3 primeros
-    top_completos = la_liga.obtener_top_jugadores_partidos_enteros(15)
-
-    for jug_obj, num_completos in top_completos:
-        print(f"- {jug_obj.nombre}: {num_completos} partidos enteros jugados.")
+    resultados = la_liga.obtener_top_jugadores_íntegros(3)
     
+    for nombre, partidos in resultados:
+        print(f"- {nombre}: {partidos} partidos enteros jugados.")
+            
     print("\n")
+
+
+
+
+    # --- EJERCICIO 10 ---
+    print("---EJERCICIO 10---")
+    
+    # Preparamos la lista con las combinaciones exactas de Equipo y Temporada
+    busquedas_ej10 = [
+        ("R.C.D. Espanyol", "2012-13"),
+        ("Real Zaragoza CD", "1996-97"),
+        ("Real Zaragoza CD", "1995-96")
+    ]
+    
+    # Recorremos la lista
+    for equipo, temporada in busquedas_ej10:
+        # Llamamos a la función que creamos en liga.py
+        tarjetas = la_liga.obtener_tarjetas_equipo_temporada(equipo, temporada)
+        
+        # Imprimimos calcando el formato de las soluciones
+        print(f"- {equipo} ({temporada}): {tarjetas} tarjetas conjuntas.")
+        
+    print("\n")
+
+
+    # --- EJERCICIO 11 ---
+    print("Ejercicio 11")
+    print("LOS REVULSIVOS DE ORO")
+    
+    nombres_ej11 = ["MORATA", "LOINAZ", "BOJAN"]
+    
+    # Llamamos al método
+    resultados_ej11 = la_liga.obtener_revulsivos(nombres_ej11)
+    
+    # Imprimimos los resultados con el formato exacto
+    for nombre in nombres_ej11:
+        if nombre in resultados_ej11:
+            goles, min_por_gol = resultados_ej11[nombre]
+            print(f"- {nombre}: {goles} goles. Marca un gol cada {min_por_gol} minutos.")
+            
+    print("\n")
+
+
+
+# --- EJERCICIO 12 (Top Años en Activo) ---
+    print("---EJERCICIO 12---")
+    
+    # El enunciado pide los 4 primeros
+    top_n = 4 
+    
+    # Llamamos a la función
+    top_jugadores = la_liga.obtener_top_jugadores_mas_temporadas(top_n)
+    
+    # Montamos el texto calcado al del profesor
+    for nombre, anios, anio_inicio, anio_fin in top_jugadores:
+        print(f"- {nombre}: {anios} años en activo (De {anio_inicio} a {anio_fin}).")
+        
+    print("\n")
+
+
+
+# --- EJERCICIO 13 (Impolutos con nueva lógica) ---
+    print("---EJERCICIO 13---")
+    
+    # Pedimos el Top 3
+    top_n = 3 
+    resultados = la_liga.obtener_top_jugadores_impolutos(top_n)
+    
+    for nombre, partidos in resultados:
+        print(f"- {nombre}: {partidos} partidos disputados de forma impoluta.")
+        
+    print("\n")
+
+# --- EJERCICIO 14 (Más sustituidos) ---
+    print("---TOP JUGADORES SUSTITUIDOS---")
+    
+    top_n = 3
+    resultados = la_liga.obtener_top_jugadores_sustituidos(top_n)
+    
+    for nombre, cambios in resultados:
+        # Formato especial para que quede igual que tu ejemplo
+        if "ETXEBERRIA" in nombre:
+            print(f"- {nombre}: Cambiado en {cambios}")
+        else:
+            print(f"- {nombre}: Cambiado en {cambios} ocasiones.")
+            
+    print("\n")
+
+
+
+    # --- EJERCICIO 15 ---
+    print("---TOP GOLEADORES POR TEMPORADA---")
+    
+    resultados = la_liga.obtener_top_goleadores_unicos(4)
+    
+    for r in resultados:
+        print(f"- {r['nombre']}: {r['goles']} goles. Todos anotados en la {r['temporada']}.")
+
+
+
+
+    # --- EJERCICIO 16 (Ratio Goleador) ---
+    print("---TOP EFICIENCIA GOLEADORA---")
+    
+    top_n = 10
+    resultados = la_liga.obtener_top_eficiencia_goleadora(top_n)
+    
+    for r in resultados:
+  
+        print(f"- {r['nombre']}: {r['goles']} goles. Marca un gol cada {r['ratio']:.1f} minutos.")
+            
+    print("\n")
+
+
+
 
 
 
