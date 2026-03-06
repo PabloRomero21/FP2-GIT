@@ -1,6 +1,6 @@
 import os
 from factorias import*
-from modelos import*  # Asegúrate de importar tu regresor
+from modelos import*
 from math import sqrt
 
 def main():
