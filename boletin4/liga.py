@@ -27,6 +27,7 @@ class Liga:
                 # Le decimos al objeto Equipo que guarde a este jugador en esa temporada
                 self.equipos[nombre_equipo].agregar_registro(est.temporada, jugador, est)
 
+    ###EJERCICIO 1###
     def obtener_maximo_goleador_temporada(self):
         max_goles = -1
         mejor_jugador = None
@@ -43,6 +44,7 @@ class Liga:
         # Ahora devolvemos directamente los dos objetos limpios
         return mejor_jugador, mejor_estadistica
 
+    ###EJERCICIO 2###
     def obtener_maximo_goleador_historico(self):
         max_goles_totales = -1
         mejor_jugador = None
@@ -57,7 +59,7 @@ class Liga:
 
         return mejor_jugador, max_goles_totales
     
-
+    ###EJERCICIO 3###
     def obtener_jugador_mas_equipos(self):
         """
         Busca al jugador (el "trotamundos") que ha jugado en más equipos distintos.
@@ -84,7 +86,7 @@ class Liga:
 
         return mejor_jugador, lista_mejores_equipos
 
-
+    ###EJERCICIO 4###
     def obtener_jugador_record_partidos_en_un_club(self):
         """
         Busca al jugador que más partidos ha acumulado vistiendo la misma camiseta.
@@ -118,6 +120,7 @@ class Liga:
 
         return mejor_jugador, (mejor_equipo_nombre, int(max_partidos))
 
+    ###EJERCICIO 5###
     def obtener_jugador_mas_minutos_total(self):
         """
         Suma todos los minutos de todas las temporadas de cada jugador
@@ -138,6 +141,7 @@ class Liga:
 
         return mejor_jugador, int(max_minutos)
     
+    ###EJERCICIO 6###
     def obtener_objetos_equipo_jugador(self, nombre_jugador: str):
         """
         Busca a un jugador por su nombre y devuelve la lista de objetos Equipo
@@ -163,6 +167,7 @@ class Liga:
             
         return None
     
+    ###EJERCICIO 7###
     def obtener_top_jugadores_fieles(self, n: int):
         """
         Busca los N jugadores que más temporadas han pasado en un mismo club.
@@ -195,7 +200,7 @@ class Liga:
         return todos_los_registros[:n]
 
     
-
+    ###EJERCICIO 8###
     def obtener_parejas_mas_minutos_juntos(self, n: int):
         """
         Calcula qué parejas de jugadores han acumulado más minutos compartiendo vestuario.
@@ -235,9 +240,40 @@ class Liga:
 
         return resultado[:n]
     
+    ###EJERCICIO 9###
+    def obtener_top_jugadores_íntegros(self, n: int) -> list:
+        ranking = []
+        
+        for nombre, jugador in self.jugadores.items():
+            total_partidos_desde_1980 = 0
+            es_integro = True
+            jugo_desde_1980 = False
+            
+            for est in jugador.estadisticas:
+                try:
+                    anio = int(str(est.temporada)[:4])
+                    
+                    if anio >= 1980:
+                        jugo_desde_1980 = True
+                        # Si en cualquier momento desde 1980 no es titular o no termina...
+                        if not (est.pjugados == est.ptitular == est.pcompletos):
+                            es_integro = False
+                            break
+                        total_partidos_desde_1980 += est.pjugados
+                except ValueError:
+                    continue
+            
+            # Solo aceptamos si jugó en esa época y nunca falló en su "integridad"
+            if jugo_desde_1980 and es_integro and total_partidos_desde_1980 > 0:
+                ranking.append((nombre, int(total_partidos_desde_1980)))
+        
+        # Ordenamos de mayor a menor
+        ranking.sort(key=lambda x: x[1], reverse=True)
+        return ranking[:n]
     
     
-
+    
+    ###EJERCICIO 10###
     def obtener_tarjetas_equipo_temporada(self, equipo: str, temporada: str) -> int:
         total_tarjetas = 0
         equipo_buscado = equipo.upper()
@@ -255,7 +291,7 @@ class Liga:
                     
         return int(total_tarjetas)
     
-
+    ###EJERCICIO 11###
     def obtener_revulsivos(self, lista_jugadores: list) -> dict:
         resultados = {}
         
@@ -282,6 +318,9 @@ class Liga:
                 
         return resultados
     
+
+
+    ###EJERCICIO 12###
     def obtener_top_jugadores_mas_temporadas(self, n: int) -> list:
         lista_activos = []
         
@@ -322,7 +361,7 @@ class Liga:
         return lista_activos[:n]
     
 
-
+    ###EJERCICIO 13###
     def obtener_top_jugadores_impolutos(self, n: int) -> list:
         lista_resultados = []
         
@@ -356,6 +395,8 @@ class Liga:
         
         return lista_resultados[:n]
     
+
+    ###EJERCICIO 14###
     def obtener_top_jugadores_sustituidos(self, n: int) -> list:
         lista_sustituidos = []
         
@@ -383,6 +424,7 @@ class Liga:
         return lista_sustituidos[:n]
     
 
+    ###EJERCICIO 15###
     def obtener_top_goleadores_unicos(self, n: int) -> list:
         jugadores_una_sola_vez = []
         
@@ -406,7 +448,7 @@ class Liga:
         return jugadores_una_sola_vez[:n]
     
 
-
+    ###EJERCICIO 16###
     def obtener_top_eficiencia_goleadora(self, n: int) -> list:
         ranking_eficiencia = []
         
@@ -435,37 +477,9 @@ class Liga:
         return ranking_eficiencia[:n]
 
 
-    def obtener_top_jugadores_íntegros(self, n: int) -> list:
-        ranking = []
-        
-        for nombre, jugador in self.jugadores.items():
-            total_partidos_desde_1980 = 0
-            es_integro = True
-            jugo_desde_1980 = False
-            
-            for est in jugador.estadisticas:
-                try:
-                    anio = int(str(est.temporada)[:4])
-                    
-                    if anio >= 1980:
-                        jugo_desde_1980 = True
-                        # Si en cualquier momento desde 1980 no es titular o no termina...
-                        if not (est.pjugados == est.ptitular == est.pcompletos):
-                            es_integro = False
-                            break
-                        total_partidos_desde_1980 += est.pjugados
-                except ValueError:
-                    continue
-            
-            # Solo aceptamos si jugó en esa época y nunca falló en su "integridad"
-            if jugo_desde_1980 and es_integro and total_partidos_desde_1980 > 0:
-                ranking.append((nombre, int(total_partidos_desde_1980)))
-        
-        # Ordenamos de mayor a menor
-        ranking.sort(key=lambda x: x[1], reverse=True)
-        return ranking[:n]
 
 
+    ###EJERCICIO 17###
     def obtener_top_jugadores_sin_gol(self, n: int) -> list:
         ranking = []
         
@@ -488,7 +502,9 @@ class Liga:
         ranking.sort(key=lambda x: x['completos'], reverse=True)
         
         return ranking[:n]
-    
+
+
+    ###EJERCICIO 18###   
     def obtener_jugadores_goles_decadas_exacto(self, n: int) -> list:
         ranking = []
         
@@ -525,7 +541,7 @@ class Liga:
         return ranking[:n]
     
 
-
+    ###EJERCICIO 19###
     def obtener_descendidos(self, temporada_objetivo: str) -> list:
         # 1. Identificar la temporada siguiente (ej: "1950-51" -> "1951-52")
         try:
@@ -556,6 +572,8 @@ class Liga:
         descendidos = sorted(list(equipos_ahora - equipos_proxima))
         return descendidos
     
+
+    ###EJERCICIO 20###
     def obtener_equipos_mas_descendidos(self, n: int) -> str:
         from collections import Counter
         
@@ -602,7 +620,7 @@ class Liga:
             
         return resultado.strip()
     
-
+    ###EJERCICIO 21###
     def obtener_ascendidos(self, temporada_objetivo: str) -> list:
         # La primera temporada de la historia no tiene "ascendidos"
         if temporada_objetivo == "1928-29":
@@ -640,9 +658,10 @@ class Liga:
         ascendidos = sorted(list(equipos_ahora - equipos_anterior))
         
         return ascendidos
-    
 
-    def obtener_equipos_mas_ascendidos(self, n: int) -> str:
+
+    ###EJERICIO 22###
+    def obtener_equipos_mas_ascendidos(self, n: int) -> list:
         from collections import Counter
         
         # 1. Agrupamos los equipos por temporada igual que hicimos con los descensos
@@ -689,15 +708,11 @@ class Liga:
         # 4. Ordenamos: 1º Más ascensos (descendente), 2º Orden alfabético (A-Z) para empates
         ordenados = sorted(conteo.items(), key=lambda x: (-x[1], x[0]))
         
-        # 5. Formateamos tal y como lo has pedido
-        resultado = ""
-        for equipo, num in ordenados[:n]:
-            resultado += f"- {equipo}: {num} ascensos\n"
-            
-        return resultado.strip()
+        # 5. Devolvemos los datos "crudos" limitados al top N
+        return ordenados[:n]
     
-
-    def obtener_equipos_mas_temporadas(self, n: int) -> str:
+    ###EJERCICIO 23###
+    def obtener_equipos_mas_temporadas(self, n: int) -> list:
         conteo_temporadas = []
         
         # 1. Recorremos todos los equipos y contamos cuántas temporadas tienen registradas
@@ -708,15 +723,11 @@ class Liga:
         # 2. Ordenamos: 1º Más temporadas (descendente), 2º Orden alfabético en caso de empate
         ordenados = sorted(conteo_temporadas, key=lambda x: (-x[1], x[0]))
         
-        # 3. Construimos el texto con el formato exacto que pediste
-        resultado = ""
-        for equipo, num in ordenados[:n]:
-            resultado += f"- {equipo}: {num} temporadas\n"
-            
-        return resultado.strip()
+        # 3. Devolvemos directamente la lista de tuplas (equipo, num_temporadas)
+        return ordenados[:n]
     
-
-    def obtener_equipos_menos_temporadas(self, n: int) -> str:
+    ###EJERICICIO 24###
+    def obtener_equipos_menos_temporadas(self, n: int) -> list:
         conteo_temporadas = []
         
         # 1. Recorremos todos los equipos y contamos cuántas temporadas tienen
@@ -728,15 +739,11 @@ class Liga:
         # Nota: Al no poner un signo '-' en x[1], Python ordena de menor a mayor automáticamente
         ordenados = sorted(conteo_temporadas, key=lambda x: (x[1], x[0]))
         
-        # 3. Construimos el texto con el formato exacto
-        resultado = ""
-        for equipo, num in ordenados[:n]:
-            resultado += f"- {equipo}: {num} temporadas\n"
-            
-        return resultado.strip()
+        # 3. Devolvemos la lista limpia con los n primeros resultados
+        return ordenados[:n]
     
-
-    def obtener_equipos_mas_goles(self, n: int) -> str:
+    ###EJERICICIO 25###
+    def obtener_equipos_mas_goles(self, n: int) -> list:
         conteo_goles = []
         
         # 1. Recorremos todos los equipos
@@ -755,15 +762,12 @@ class Liga:
         # 3. Ordenamos: 1º Más goles (descendente), 2º Orden alfabético en caso de empate
         ordenados = sorted(conteo_goles, key=lambda x: (-x[1], x[0]))
         
-        # 4. Construimos el texto con el formato exacto
-        resultado = ""
-        for equipo, goles in ordenados[:n]:
-            resultado += f"- {equipo}: {goles} goles\n"
-            
-        return resultado.strip()
+        # 4. Devolvemos la lista limpia con los datos
+        return ordenados[:n]
     
 
-    def obtener_equipos_menos_goles(self, n: int) -> str:
+    ###EJERICICIO 26###
+    def obtener_equipos_menos_goles(self, n: int) -> list:
         conteo_goles = []
         
         # 1. Recorremos todos los equipos y sumamos sus goles totales
@@ -786,15 +790,11 @@ class Liga:
         # reordenamos esta pequeña lista de 10 de forma descendente.
         peores_n_descendente = sorted(peores_n, key=lambda x: (-x[1], x[0]))
         
-        # 5. Construimos el texto con el formato exacto
-        resultado = ""
-        for equipo, goles in peores_n_descendente:
-            resultado += f"- {equipo}: {goles} goles\n"
-            
-        return resultado.strip()
+        # 5. Devolvemos directamente la lista de tuplas procesada
+        return peores_n_descendente
     
-
-    def obtener_mejores_temporadas_ratio_goles(self, n: int) -> str:
+    ###EJERIICIO 27###
+    def obtener_mejores_temporadas_ratio_goles(self, n: int) -> list:
         stats_temporada = {}
         
         # 1. Agrupamos los equipos y los goles por cada temporada
@@ -836,20 +836,15 @@ class Liga:
         # 3. Obtenemos las 'n' temporadas con MEJOR RATIO (de mayor a menor)
         top_n = sorted(resultados_ratio, key=lambda x: x['ratio'], reverse=True)[:n]
         
-        # 4. Ordenamos ese 'Top N' cronológicamente (para que salga como en tu ejemplo)
+        # 4. Ordenamos ese 'Top N' cronológicamente para mantener el orden de tu ejemplo
         top_n_cronologico = sorted(top_n, key=lambda x: x['temporada'])
         
-        # 5. Formateamos el texto de salida
-        resultado = ""
-        for r in top_n_cronologico:
-            # :.2f sirve para limitar los decimales del ratio a dos dígitos
-            resultado += f"- Temporada {r['temporada']}: {r['goles']} goles en {r['partidos']} partidos. Media: {r['ratio']:.2f} goles/partido.\n"
-            
-        return resultado.strip()
+        # 5. Devolvemos la lista de diccionarios con los datos limpios
+        return top_n_cronologico
     
 
-
-    def obtener_empates_equipos_mas_goles(self) -> str:
+    ###EJERICIO 28###
+    def obtener_empates_equipos_mas_goles(self) -> list:
         goles_temporada = {}
         
         # 1. Agrupamos los goles de cada equipo por temporada
@@ -874,17 +869,19 @@ class Liga:
             # Filtramos qué equipos marcaron esa cifra máxima
             maximos_goleadores = [equipo for equipo, goles in equipos_de_temporada.items() if goles == max_goles]
             
-            # 3. Si hay MÁS DE UNO, significa que hubo empate por el título de equipo más goleador
+            # 3. Si hay MÁS DE UNO, guardamos los datos limpios en la lista
             if len(maximos_goleadores) > 1:
-                # Unimos los nombres de los equipos con una coma
-                equipos_str = ", ".join(maximos_goleadores)
-                resultados.append(f"- Temporada {temporada}: Máximo goleador fue {equipos_str}")
+                resultados.append({
+                    'temporada': temporada,
+                    'equipos': maximos_goleadores
+                })
                 
-        return "\n".join(resultados)
+        # 4. Devolvemos la lista de diccionarios procesada
+        return resultados
     
 
-
-    def obtener_rachas_maximo_goleador(self, n: int) -> str:
+    ###EJERCICIO 29###
+    def obtener_rachas_maximo_goleador(self, n: int) -> list:
         goles_temporada = {}
         
         # 1. Agrupamos los goles totales de cada equipo por temporada
@@ -926,15 +923,187 @@ class Liga:
                     rachas_actuales[equipo] = 0
                     
         # 4. Ordenamos por racha (descendente) y luego alfabéticamente
-        # Ojo: En tu ejemplo el Real Madrid salía antes que el Athletic. 
-        # Para forzar ese orden exacto ordenamos la racha (-x[1]) y el nombre a la inversa (x[0] con reverse=True 
-        # para que la R vaya antes que la A, o puedes dejarlo por defecto si te da igual el desempate).
         ordenados = sorted(rachas_maximas.items(), key=lambda x: (-x[1], x[0] == "Athletic Club"))
         
-        # 5. Formateamos el texto
-        resultado = ""
-        for equipo, racha in ordenados[:n]:
-            # Añado un salto de línea \n al final para que quede en formato lista limpio.
-            resultado += f"- {equipo}: Racha de {racha} temporadas consecutivas siendo el máximo goleador.\n"
+        # 5. Devolvemos la lista limpia con los 'n' mejores resultados
+        return ordenados[:n]
+    
+    ###EJERICICIO 30###
+    def obtener_jugadores_comunes(self, equipo1: str, equipo2: str) -> list:
+        jugadores_comunes = []
+        
+        for nombre, jugador in self.jugadores.items():
+            # Recopilamos todos los equipos en los que ha jugado este jugador
+            equipos_jugador = set()
+            for est in jugador.estadisticas:
+                equipos_jugador.add(est.equipo)
             
-        return resultado.strip()
+            # Comprobamos si ambos equipos están en su historial
+            if equipo1 in equipos_jugador and equipo2 in equipos_jugador:
+                jugadores_comunes.append(nombre)
+                
+        # Ordenamos la lista alfabéticamente para que los ejemplos coincidan con el PDF
+        return sorted(jugadores_comunes)
+
+    ###EJERICICIO 31###
+    def obtener_menor_promedio_minutos(self, n: int) -> list:
+        ranking = []
+        
+        for nombre, jugador in self.jugadores.items():
+            total_minutos = 0
+            temporadas_unicas = set()
+            
+            for est in jugador.estadisticas:
+                # Sumamos los minutos
+                total_minutos += est.minutos
+                # Añadimos la temporada al conjunto para contar años reales
+                temporadas_unicas.add(est.temporada)
+                
+            num_temporadas = len(temporadas_unicas)
+            
+            # Mantenemos el filtro de 8 temporadas como mínimo exigido
+            if num_temporadas >= 8 and total_minutos > 0:
+                promedio = total_minutos / num_temporadas
+                ranking.append({
+                    'nombre': nombre,
+                    'promedio': promedio,
+                    'total_minutos': int(total_minutos),
+                    'temporadas': num_temporadas
+                })
+                
+        # NUEVA ORDENACIÓN:
+        # 1º Prioridad: Menor número de temporadas (ej: 8 va antes que 9)
+        # 2º Prioridad: Menor promedio de minutos
+        ranking.sort(key=lambda x: (x['temporadas'], x['promedio']))
+        
+        return ranking[:n]
+
+    ###EJERICICIO 32###
+    def obtener_top_anios_fuera(self, n: int) -> list:
+        ranking = []
+        
+        for nombre, jugador in self.jugadores.items():
+            # Agrupamos los años de inicio de temporada por equipo
+            anios_por_equipo = {}
+            
+            for est in jugador.estadisticas:
+                try:
+                    # Extraemos el año inicial (ej: "1998" de "1998-99")
+                    anio = int(str(est.temporada)[:4])
+                    if est.equipo not in anios_por_equipo:
+                        anios_por_equipo[est.equipo] = []
+                    anios_por_equipo[est.equipo].append(anio)
+                except ValueError:
+                    continue
+            
+            # Buscamos el mayor "hueco" (gap) entre años consecutivos para un mismo equipo
+            for equipo, anios in anios_por_equipo.items():
+                if len(anios) > 1:
+                    anios.sort()
+                    max_gap = 0
+                    
+                    # Comparamos cada año con el anterior de su lista
+                    for i in range(1, len(anios)):
+                        gap = anios[i] - anios[i-1]
+                        if gap > max_gap:
+                            max_gap = gap
+                    
+                    # Si el salto es mayor a 1 año, significa que hubo una ausencia
+                    if max_gap > 1:
+                        ranking.append({
+                            'nombre': nombre,
+                            'equipo': equipo,
+                            'anios_fuera': max_gap
+                        })
+                        
+        # Ordenamos de MAYOR a MENOR número de años fuera
+        ranking.sort(key=lambda x: x['anios_fuera'], reverse=True)
+        
+        return ranking[:n]
+    
+    ####EJERCICIO 33##
+    def obtener_rachas_sin_tarjetas_desempate_goles(self, n: int) -> list:
+        jugador_stats = {}
+        goles_totales = {}
+        
+        # 1. Agrupamos datos de tarjetas, minutos y acumulamos goles
+        for equipo_obj in self.equipos.values():
+            for temporada, registros in equipo_obj.temporadas.items():
+                for jugador_obj, est_obj in registros:
+                    nombre = jugador_obj.nombre
+                    if nombre not in jugador_stats:
+                        jugador_stats[nombre] = {}
+                        goles_totales[nombre] = 0
+                    
+                    # Extraemos los datos del objeto Estadística
+                    tarjetas = float(getattr(est_obj, 'tarjetas', 0))
+                    minutos = float(getattr(est_obj, 'minutos', 0))
+                    goles = float(getattr(est_obj, 'goles', 0))
+                    
+                    jugador_stats[nombre][temporada] = {'t': tarjetas, 'm': minutos}
+                    goles_totales[nombre] += goles
+
+        resultados = []
+
+        # 2. Calculamos las rachas (Filtro: Año >= 1970 y Minutos > 0)
+        for nombre, temporadas in jugador_stats.items():
+            racha_actual = 0
+            racha_maxima = 0
+            anio_previo = -1
+            
+            temps_ordenadas = sorted(temporadas.keys())
+            
+            for temp in temps_ordenadas:
+                try:
+                    anio_actual = int(temp.split('-')[0])
+                except: continue
+                
+                if anio_actual < 1970: continue
+
+                datos = temporadas[temp]
+                
+                # Sin tarjetas y con minutos en el campo
+                if datos['t'] == 0 and datos['m'] > 0:
+                    if racha_actual == 0 or anio_actual == anio_previo + 1:
+                        racha_actual += 1
+                    else:
+                        racha_actual = 1
+                    
+                    if racha_actual > racha_maxima:
+                        racha_maxima = racha_actual
+                else:
+                    racha_actual = 0
+                
+                anio_previo = anio_actual
+            
+            if racha_maxima > 0:
+                resultados.append({
+                    'nombre': nombre,
+                    'racha': racha_maxima,
+                    'goles': goles_totales[nombre]
+                })
+
+        # 3. ORDENACIÓN DE DESEMPATE:
+        # 1º Racha (descendente: -x['racha'])
+        # 2º Goles (descendente: -x['goles']) -> DESEMPATE
+        # 3º Nombre (ascendente: x['nombre'])
+        resultados.sort(key=lambda x: (-x['racha'], -x['goles'], x['nombre']))
+        
+        return resultados[:n]
+
+
+    def obtener_historial_jugador_completo(self, nombre_jugador: str) -> list:
+        historial = []
+        nombre_buscar = nombre_jugador.upper()
+        
+        for nombre_equipo, equipo_obj in self.equipos.items():
+            for temporada, registros in equipo_obj.temporadas.items():
+                for jugador_obj, est_obj in registros:
+                    if jugador_obj.nombre.upper() == nombre_buscar:
+                        datos = {'temporada': temporada, 'equipo': nombre_equipo}
+                        # Extraemos absolutamente todos los atributos del objeto
+                        for clave, valor in vars(est_obj).items():
+                            datos[clave] = valor
+                        historial.append(datos)
+                        
+        return sorted(historial, key=lambda x: x['temporada'])

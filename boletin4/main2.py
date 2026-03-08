@@ -214,7 +214,7 @@ def main():
     print("\n")
 
 
-    # --- NUEVO EJERCICIO (Equipos con más descensos) ---
+    # --- EJERCICIO 20(Equipos con más descensos) ---
     print("--- TOP EQUIPOS CON MÁS DESCENSOS ---")
     
     # Llamamos al método indicando que queremos el top 3 (n=3)
@@ -228,7 +228,7 @@ def main():
     print("\n")
 
 
-    # --- NUEVO EJERCICIO (Equipos Ascendidos) ---
+    # --- EJERICIO 21(Equipos Ascendidos) ---
     print("--- EQUIPOS ASCENDIDOS POR TEMPORADA ---")
     
     # Lista con las temporadas exactas que quieres comprobar
@@ -249,83 +249,162 @@ def main():
     print("\n")
 
 
-    # --- NUEVO EJERCICIO (Equipos con más ascensos históricos) ---
-    print("--- TOP EQUIPOS CON MÁS ASCENSOS ---")
+    # --- EJERCICIO 22(Equipos con más ascensos históricos) ---
+    print("--- EQUIPOS MÁS ASCENDIDOS ---")
     
-    # Llamamos al método pidiendo el top 1 (o los que quieras)
-    resultado_ascensos = la_liga.obtener_equipos_mas_ascendidos(1)
+    # Supongamos que queremos el top 5
+    top_ascensos = 5 
+    resultados_ascensos = la_liga.obtener_equipos_mas_ascendidos(top_ascensos)
     
-    print(resultado_ascensos)
+    for equipo, num_ascensos in resultados_ascensos:
+        print(f"- {equipo}: {num_ascensos} ascensos")
+        
     print("\n")
 
 
-    # --- NUEVO EJERCICIO (Equipos con más temporadas en Primera) ---
-    print("--- TOP EQUIPOS CON MÁS TEMPORADAS EN PRIMERA ---")
+    # ---EJERCICIO 23 ---
+    print("--- EQUIPOS CON MÁS TEMPORADAS ---")
     
-    # Llamamos al método pidiendo los 10 primeros (n=10)
-    resultado_temporadas = la_liga.obtener_equipos_mas_temporadas(10)
+    # Suponiendo que quieres sacar el top 5
+    top_n = 5 
+    resultados_temporadas = la_liga.obtener_equipos_mas_temporadas(top_n)
     
-    print(resultado_temporadas)
+    for equipo, num in resultados_temporadas:
+        print(f"- {equipo}: {num} temporadas")
+            
+    print("\n")
+
+# --- EJERCICIO 24--
+    print("--- EQUIPOS CON MENOS TEMPORADAS ---")
+    
+    # Por ejemplo, pedimos los 5 primeros
+    top_n_menos = 5 
+    resultados_menos_temporadas = la_liga.obtener_equipos_menos_temporadas(top_n_menos)
+    
+    for equipo, num in resultados_menos_temporadas:
+        print(f"- {equipo}: {num} temporadas")
+            
     print("\n")
 
 
-    # --- NUEVO EJERCICIO (Equipos con menos temporadas en Primera) ---
-    print("--- EQUIPOS CON MENOS TEMPORADAS EN PRIMERA ---")
+
+# --- EJERCICIO 25---
+    print("--- EQUIPOS CON MÁS GOLES ---")
     
-    # Llamamos al método pidiendo los 10 con menos apariciones (n=10)
-    resultado_menos_temporadas = la_liga.obtener_equipos_menos_temporadas(10)
+    # Suponiendo que el ejercicio pide el top 5
+    top_n_goles = 5 
+    resultados_goles = la_liga.obtener_equipos_mas_goles(top_n_goles)
     
-    print(resultado_menos_temporadas)
+    for equipo, goles in resultados_goles:
+        print(f"- {equipo}: {goles} goles")
+            
     print("\n")
 
 
-    # --- NUEVO EJERCICIO (Equipos con más goles en la historia) ---
-    print("--- TOP EQUIPOS CON MÁS GOLES EN LA HISTORIA ---")
+    # ---EJERICIO 26---
+# --- EJERCICIO (Equipos con menos goles) ---
+    print("--- EQUIPOS CON MENOS GOLES ---")
     
-    # Llamamos al método pidiendo los 10 primeros (n=10)
-    resultado_mas_goles = la_liga.obtener_equipos_mas_goles(10)
+    # Siguiendo el comentario de tu código, pedimos los 10 peores
+    top_n_menos_goles = 10 
+    resultados_menos_goles = la_liga.obtener_equipos_menos_goles(top_n_menos_goles)
     
-    print(resultado_mas_goles)
-    print("\n")
-
-
-    # --- NUEVO EJERCICIO (Equipos con menos goles en la historia) ---
-    print("--- EQUIPOS CON MENOS GOLES EN LA HISTORIA ---")
-    
-    # Llamamos al método pidiendo los 10 con menos goles (n=10)
-    resultado_menos_goles = la_liga.obtener_equipos_menos_goles(10)
-    
-    print(resultado_menos_goles)
+    for equipo, goles in resultados_menos_goles:
+        print(f"- {equipo}: {goles} goles")
+            
     print("\n")
 
 
     # --- NUEVO EJERCICIO (Temporadas con mejor ratio de goles) ---
-    print("--- TEMPORADAS CON MEJOR RATIO GOLES/PARTIDO ---")
+  # --- EJERCICIO 27(Mejores temporadas por ratio de goles) ---
+    print("--- MEJORES TEMPORADAS POR RATIO DE GOLES ---")
     
-    # Llamamos al método pidiendo el top 12 (n=12)
-    resultado_ratios = la_liga.obtener_mejores_temporadas_ratio_goles(12)
+    # Por ejemplo, pedimos el Top 5
+    top_n_ratio = 5 
+    resultados_ratio = la_liga.obtener_mejores_temporadas_ratio_goles(top_n_ratio)
     
-    print(resultado_ratios)
+    for r in resultados_ratio:
+        # :.2f sirve para limitar los decimales del ratio a dos dígitos
+        print(f"- Temporada {r['temporada']}: {r['goles']} goles en {r['partidos']} partidos. Media: {r['ratio']:.2f} goles/partido.")
+            
     print("\n")
 
 
-    # --- NUEVO EJERCICIO (Empates en el equipo más goleador de la temporada) ---
-    print("--- TEMPORADAS CON EMPATE AL EQUIPO MÁS GOLEADOR ---")
+# --- EJERCICIO 28(Empates en el título de equipo más goleador) ---
+    print("--- EMPATES: EQUIPOS MÁS GOLEADORES POR TEMPORADA ---")
     
-    # Llamamos al método
-    resultado_empates = la_liga.obtener_empates_equipos_mas_goles()
+    resultados_empates = la_liga.obtener_empates_equipos_mas_goles()
     
-    print(resultado_empates)
+    for empate in resultados_empates:
+        # Unimos los nombres de los equipos con una coma para mostrarlos
+        equipos_str = ", ".join(empate['equipos'])
+        print(f"- Temporada {empate['temporada']}: Máximo goleador fue {equipos_str}")
+            
     print("\n")
 
 
-    # --- NUEVO EJERCICIO (Mayores rachas como máximo goleador) ---
-    print("--- EQUIPOS CON MAYOR RACHA SIENDO MÁXIMO GOLEADOR ---")
+# --- EJERCICIO 29(Mejores rachas como máximo goleador) ---
+    print("--- RACHAS COMO EQUIPO MÁS GOLEADOR ---")
     
-    # Llamamos al método pidiendo el top 3 (n=3)
-    resultado_rachas = la_liga.obtener_rachas_maximo_goleador(3)
+    # Por ejemplo, pedimos el Top 3 o Top 5
+    top_n_rachas = 5 
+    resultados_rachas = la_liga.obtener_rachas_maximo_goleador(top_n_rachas)
     
-    print(resultado_rachas)
+    for equipo, racha in resultados_rachas:
+        print(f"- {equipo}: Racha de {racha} temporadas consecutivas siendo el máximo goleador.")
+            
+    print("\n")
+
+    # --- EJERCICIO 30 (Jugadores en común) ---
+    print("--- EJERCICIO 30 (JUGADORES EN COMÚN ENTRE EQUIPOS) ---")
+    
+    equipo_a = "Sevilla F.C."
+    equipo_b = "Real Betis B. S."
+    
+    comunes = la_liga.obtener_jugadores_comunes(equipo_a, equipo_b)
+    
+    if comunes:
+        # Tomamos solo los 5 primeros de la lista ordenada para los ejemplos
+        ejemplos_str = ", ".join(comunes[:5])
+        
+        # Formato calcado al del boletín
+        print(f"- {equipo_a} vs {equipo_b}: {len(comunes)} jugadores. Ejemplos: {ejemplos_str}")
+            
+    print("\n")
+
+# --- EJERCICIO 31 (Menor promedio de minutos) ---
+    print("--- EJERCICIO 31 (MENOR PROMEDIO DE MINUTOS) ---")
+    
+    resultados_ej31 = la_liga.obtener_menor_promedio_minutos(5)
+    
+    for r in resultados_ej31:
+        # Imprimimos formateando a un decimal el promedio
+        print(f"- {r['nombre']}: Promedio de {r['promedio']:.1f} minutos por temporada (Total: {r['total_minutos']} minutos en {r['temporadas']} temporadas).")
+            
+    print("\n")
+
+
+    # --- EJERCICIO 32 (Años fuera de un equipo) ---
+    print("--- EJERCICIO 32 (MÁS AÑOS FUERA DEL MISMO EQUIPO) ---")
+    
+    resultados_ej32 = la_liga.obtener_top_anios_fuera(5)
+    
+    for r in resultados_ej32:
+        print(f"- {r['nombre']} - Equipo: {r['equipo']}, Años fuera: {r['anios_fuera']}.")
+            
+    print("\n")
+
+
+
+    # --- EJERCICIO 33 (Racha temporadas sin completar partidos) ---
+    print("--- EJERCICIO 33 ---")
+    
+    resultados_ej33 = la_liga.obtener_racha_sin_completar(3)
+    
+    for r in resultados_ej33:
+        # Formato exacto del PDF
+        print(f"- {r['nombre']}: Racha de {r['racha']} temporadas consecutivas.")
+            
     print("\n")
 
 if __name__ == "__main__":
