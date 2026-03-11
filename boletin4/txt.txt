@@ -1,0 +1,298 @@
+tengo eesto:
+
+class Estadistica:
+    """
+    Representa el rendimiento de un jugador en un equipo durante una temporada concreta.
+    (Equivale a una fila del archivo Excel)
+    """
+    def __init__(self, temporada: str, equipo: str, pjugados: float, pcompletos: float,
+                 ptitular: float, psuplente: float, minutos: float, lesiones: float,
+                 tarjetas: float, expulsiones: float, goles: float, penalties_fallados: float):
+        self.temporada = temporada
+        self.equipo = equipo
+        self.pjugados = pjugados
+        self.pcompletos = pcompletos
+        self.ptitular = ptitular
+        self.psuplente = psuplente
+        self.minutos = minutos
+        self.lesiones = lesiones
+        self.tarjetas = tarjetas
+        self.expulsiones = expulsiones
+        self.goles = goles
+        self.penalties_fallados = penalties_fallados
+
+    def __str__(self):
+        return f"[{self.temporada} | {self.equipo}] Partidos: {self.pjugados} - Goles: {self.goles}"
+
+y este funcion:
+
+
+    ###EJERCICIO 18###   
+    def obtener_jugadores_goles_decadas_exacto(self, n: int) -> list:
+        ranking = []
+        
+        for nombre, jugador in self.jugadores.items():
+            decadas_con_gol = set()
+            total_goles_carrera = 0
+            total_partidos_jugados = 0
+            total_penalties_fallados = 0
+            
+            for est in jugador.estadisticas:
+                total_goles_carrera += est.goles
+                total_partidos_jugados  += est.pjugados
+                total_penalties_fallados += est.penalties_fallados
+                if est.goles > 0:
+                    try:
+                        anio = int(str(est.temporada)[:4])
+                        decada = (anio // 10) * 10
+                        decadas_con_gol.add(decada)
+                    except (ValueError, IndexError):
+                        continue
+            
+            if decadas_con_gol:
+                decadas_lista = sorted(list(decadas_con_gol))
+                ranking.append({
+                    'nombre': nombre,
+                    'num_decadas': len(decadas_lista),
+                    'decadas': decadas_lista,
+                    'primera_decada': decadas_lista[0],
+                    'total_goles': total_goles_carrera,
+                    'total_partidos_jugados' : total_partidos_jugados,
+                    'penalties_fallados' : total_penalties_fallados
+                })
+
+
+Como tengo que establecer el criterio de ordenacion si quiero que la funcion me devuleva este orden:
+
+- SARO: Goles en 3 décadas distintas (1920, 1930, 1940).
+- MARIN: Goles en 3 décadas distintas (1920, 1930, 1940).
+- CHOLIN: Goles en 3 décadas distintas (1920, 1930, 1940).
+- P. BIENZOBAS: Goles en 3 décadas distintas (1920, 1930, 1940).
+- VICT. UNAMUNO: Goles en 3 décadas distintas (1920, 1930, 1940)
+
+Siendo los datos de los jjugadores estos:
+
+
+SOLE JUNOY
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1928-29     R.C.D. Espanyol11.0        11.0        11.0        0.0         990.0       0.0         0.0         0.0         0.0         0.0
+1929-30     R.C.D. Espanyol15.0        15.0        15.0        0.0         1350.0      0.0         0.0         0.0         2.0         0.0
+1930-31     R.C.D. Espanyol18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         2.0         1.0
+1931-32     R.C.D. Espanyol17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         2.0         0.0
+1932-33     R.C.D. Espanyol15.0        15.0        15.0        0.0         1350.0      0.0         0.0         0.0         3.0         0.0
+1933-34     R.C.D. Espanyol18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         1.0         0.0
+1934-35     R.C.D. Espanyol17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         0.0         1.0
+1935-36     R.C.D. Espanyol17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         1.0         0.0
+1940-41     Real Murcia C.F.20.0        20.0        20.0        0.0         1800.0      0.0         0.0         0.0         3.0         2.0
+
+
+SARO
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1928-29     Arenas de Guecho14.0        14.0        14.0        0.0         1260.0      0.0         0.0         0.0         3.0         0.0
+1929-30     Arenas de Guecho17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         5.0         0.0
+1930-31     Arenas de Guecho13.0        13.0        13.0        0.0         1170.0      0.0         0.0         0.0         0.0         0.0
+1931-32     Arenas de Guecho18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         7.0         0.0
+1932-33     Arenas de Guecho4.0         4.0         4.0         0.0         360.0       0.0         0.0         0.0         0.0         0.0
+1933-34     Real Betis B. S.10.0        10.0        10.0        0.0         900.0       0.0         0.0         0.0         1.0         0.0
+1934-35     Real Betis B. S.21.0        21.0        21.0        0.0         1890.0      0.0         0.0         0.0         0.0         0.0
+1935-36     Real Betis B. S.22.0        22.0        22.0        0.0         1980.0      0.0         0.0         0.0         0.0         0.0
+1939-40     Real Betis B. S.19.0        19.0        19.0        0.0         1710.0      0.0         0.0         0.0         5.0         0.0
+1942-43     Real Betis B. S.18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         6.0         0.0
+
+
+GALLART S.
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1928-29     R.C.D. Espanyol10.0        10.0        10.0        0.0         900.0       0.0         0.0         0.0         4.0         0.0
+1929-30     R.C.D. Espanyol10.0        10.0        10.0        0.0         900.0       0.0         0.0         0.0         7.0         0.0
+1933-34     Real Oviedo C.F.13.0        13.0        13.0        0.0         1170.0      0.0         0.0         0.0         5.0         0.0
+1934-35     Real Oviedo C.F.22.0        22.0        22.0        0.0         1980.0      0.0         0.0         0.0         5.0         0.0
+1935-36     Real Oviedo C.F.18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         4.0         0.0
+1940-41     Real Oviedo C.F.20.0        20.0        20.0        0.0         1800.0      0.0         0.0         0.0         1.0         0.0
+1941-42     Real Oviedo C.F.13.0        13.0        13.0        0.0         1170.0      0.0         0.0         0.0         3.0         0.0
+1942-43     Real Oviedo C.F.1.0         1.0         1.0         0.0         90.0        0.0         0.0         0.0         0.0         0.0
+
+
+MARIN
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1928-29     At. de Madrid18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         12.0        0.0
+1929-30     At. de Madrid17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         12.0        0.0
+1934-35     At. de Madrid8.0         8.0         8.0         0.0         720.0       0.0         0.0         0.0         1.0         0.0
+1935-36     At. de Madrid19.0        19.0        19.0        0.0         1710.0      0.0         0.0         0.0         4.0         0.0
+1939-40     Real Madrid C.F.17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         2.0         0.0
+1940-41     Real Madrid C.F.8.0         8.0         8.0         0.0         720.0       0.0         0.0         0.0         3.0         0.0
+1941-42     Granada C.F.24.0        24.0        24.0        0.0         2160.0      0.0         0.0         0.0         13.0        0.0
+1942-43     Granada C.F.25.0        25.0        25.0        0.0         2250.0      0.0         0.0         0.0         10.0        0.0
+1943-44     Granada C.F.24.0        24.0        24.0        0.0         2160.0      0.0         0.0         0.0         10.0        0.0
+1944-45     Granada C.F.11.0        11.0        11.0        0.0         990.0       0.0         0.0         0.0         0.0         0.0
+
+
+CHOLIN
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1928-29     Real Sociedad16.0        16.0        16.0        0.0         1440.0      0.0         0.0         0.0         8.0         0.0
+1929-30     Real Sociedad16.0        16.0        16.0        0.0         1440.0      0.0         0.0         0.0         10.0        0.0
+1930-31     Real Sociedad17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         13.0        0.0
+1931-32     Real Sociedad13.0        13.0        13.0        0.0         1170.0      0.0         0.0         0.0         11.0        0.0
+1932-33     Real Sociedad9.0         9.0         9.0         0.0         810.0       0.0         0.0         0.0         4.0         0.0
+1933-34     Real Sociedad7.0         7.0         7.0         0.0         630.0       0.0         0.0         0.0         2.0         0.0
+1934-35     Real Sociedad17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         5.0         0.0
+1941-42     Granada C.F.6.0         6.0         6.0         0.0         540.0       0.0         0.0         0.0         1.0         0.0
+
+
+P. BIENZOBAS
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1928-29     Real Sociedad18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         17.0        0.0
+1929-30     Real Sociedad11.0        11.0        11.0        0.0         990.0       0.0         0.0         0.0         4.0         0.0
+1930-31     Real Sociedad18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         10.0        0.0
+1931-32     Real Sociedad18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         8.0         1.0
+1935-36     C. At. Osasuna22.0        22.0        22.0        0.0         1980.0      0.0         0.0         0.0         10.0        0.0
+1941-42     Real Sociedad5.0         5.0         5.0         0.0         450.0       0.0         0.0         0.0         1.0         0.0
+
+
+RUBIO M.
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1928-29     Real Madrid C.F.17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         11.0        0.0
+1929-30     Real Madrid C.F.17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         19.0        0.0
+1934-35     Valencia C.F.14.0        14.0        14.0        0.0         1260.0      0.0         0.0         0.0         5.0         0.0
+1940-41     Real Murcia C.F.10.0        10.0        10.0        0.0         900.0       0.0         0.0         0.0         1.0         0.0
+1942-43     Granada C.F.3.0         3.0         3.0         0.0         270.0       0.0         0.0         0.0         1.0         0.0
+
+
+IRARAGORRI
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1929-30     Athletic Club13.0        13.0        13.0        0.0         1170.0      0.0         0.0         0.0         13.0        0.0
+1930-31     Athletic Club16.0        16.0        16.0        0.0         1440.0      0.0         0.0         0.0         11.0        0.0
+1931-32     Athletic Club18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         9.0         1.0
+1932-33     Athletic Club17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         14.0        1.0
+1933-34     Athletic Club17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         17.0        0.0
+1934-35     Athletic Club15.0        15.0        15.0        0.0         1350.0      0.0         0.0         0.0         12.0        1.0
+1935-36     Athletic Club17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         11.0        1.0
+1946-47     Athletic Club21.0        21.0        21.0        0.0         1890.0      0.0         0.0         0.0         5.0         0.0
+1947-48     Athletic Club2.0         2.0         2.0         0.0         180.0       0.0         0.0         0.0         0.0         0.0
+1948-49     Athletic Club4.0         4.0         4.0         0.0         360.0       0.0         0.0         0.0         2.0         0.0
+
+
+GOROSTIZA
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1929-30     Athletic Club18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         20.0        0.0
+1930-31     Athletic Club18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         17.0        0.0
+1931-32     Athletic Club15.0        15.0        15.0        0.0         1350.0      0.0         0.0         0.0         9.0         0.0
+1932-33     Athletic Club17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         14.0        1.0
+1933-34     Athletic Club15.0        15.0        15.0        0.0         1350.0      0.0         0.0         0.0         14.0        0.0
+1934-35     Athletic Club18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         8.0         1.0
+1935-36     Athletic Club18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         10.0        0.0
+1939-40     Athletic Club21.0        21.0        21.0        0.0         1890.0      0.0         0.0         0.0         14.0        0.0
+1940-41     Valencia C.F.21.0        21.0        21.0        0.0         1890.0      0.0         0.0         0.0         14.0        0.0
+1941-42     Valencia C.F.24.0        24.0        24.0        0.0         2160.0      0.0         0.0         0.0         20.0        0.0
+1942-43     Valencia C.F.13.0        13.0        13.0        0.0         1170.0      0.0         0.0         0.0         2.0         0.0
+1943-44     Valencia C.F.21.0        21.0        21.0        0.0         1890.0      0.0         0.0         0.0         16.0        0.0
+1944-45     Valencia C.F.24.0        24.0        24.0        0.0         2160.0      0.0         0.0         0.0         16.0        1.0
+1945-46     Valencia C.F.13.0        13.0        13.0        0.0         1170.0      0.0         0.0         0.0         4.0         0.0
+
+
+VICT. UNAMUNO
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1928-29     Athletic Club17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         9.0         0.0
+1929-30     Athletic Club18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         15.0        0.0
+1930-31     Athletic Club3.0         3.0         3.0         0.0         270.0       0.0         0.0         0.0         1.0         0.0
+1932-33     Athletic Club7.0         7.0         7.0         0.0         630.0       0.0         0.0         0.0         11.0        0.0
+1933-34     Real Betis B. S.17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         11.0        0.0
+1934-35     Real Betis B. S.21.0        21.0        21.0        0.0         1890.0      0.0         0.0         0.0         13.0        0.0
+1935-36     Real Betis B. S.17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         5.0         0.0
+1939-40     Athletic Club22.0        22.0        22.0        0.0         1980.0      0.0         0.0         0.0         20.0        0.0
+1940-41     Athletic Club15.0        15.0        15.0        0.0         1350.0      0.0         0.0         0.0         10.0        0.0
+1941-42     Athletic Club7.0         7.0         7.0         0.0         630.0       0.0         0.0         0.0         6.0         1.0
+
+
+CALVET
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1939-40     F.C. Barcelona2.0         2.0         2.0         0.0         180.0       0.0         0.0         0.0         2.0         0.0
+1940-41     F.C. Barcelona1.0         1.0         1.0         0.0         90.0        0.0         0.0         0.0         0.0         0.0
+1941-42     F.C. Barcelona15.0        15.0        15.0        0.0         1350.0      0.0         0.0         0.0         1.0         0.0
+1942-43     F.C. Barcelona6.0         6.0         6.0         0.0         540.0       0.0         0.0         0.0         0.0         0.0
+1943-44     F.C. Barcelona10.0        10.0        10.0        0.0         900.0       0.0         0.0         0.0         0.0         0.0
+1944-45     F.C. Barcelona10.0        10.0        10.0        0.0         900.0       0.0         0.0         0.0         0.0         0.0
+1945-46     F.C. Barcelona9.0         9.0         9.0         0.0         810.0       0.0         0.0         0.0         0.0         0.0
+1946-47     F.C. Barcelona1.0         1.0         1.0         0.0         90.0        0.0         0.0         0.0         0.0         0.0
+1947-48     F.C. Barcelona23.0        23.0        23.0        0.0         2070.0      0.0         0.0         0.0         0.0         0.0
+1948-49     F.C. Barcelona21.0        20.0        21.0        0.0         1854.0      0.0         0.0         1.0         0.0         0.0
+1949-50     F.C. Barcelona25.0        24.0        25.0        0.0         2240.0      1.0         0.0         0.0         0.0         0.0
+1950-51     F.C. Barcelona17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         4.0         0.0
+1951-52     F.C. Barcelona11.0        11.0        11.0        0.0         990.0       0.0         0.0         0.0         0.0         0.0
+1952-53     Real Oviedo C.F.4.0         4.0         4.0         0.0         360.0       0.0         0.0         0.0         0.0         0.0
+1953-54     Real Oviedo C.F.17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         0.0         0.0
+
+
+MACALA
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1939-40     Athletic Club9.0         9.0         9.0         0.0         810.0       0.0         0.0         0.0         1.0         0.0
+1940-41     R.C.D. Espanyol8.0         8.0         8.0         0.0         720.0       0.0         0.0         0.0         0.0         0.0
+1941-42     R.C.D. Espanyol21.0        21.0        21.0        0.0         1890.0      0.0         0.0         0.0         9.0         0.0
+1942-43     R.C.D. Espanyol22.0        22.0        22.0        0.0         1980.0      0.0         0.0         0.0         5.0         0.0
+1945-46     Hércules C.F.25.0        25.0        25.0        0.0         2250.0      0.0         0.0         0.0         7.0         0.0
+1947-48     Real Madrid C.F.11.0        11.0        11.0        0.0         990.0       0.0         0.0         0.0         0.0         0.0
+1948-49     Real Madrid C.F.23.0        23.0        23.0        0.0         2070.0      0.0         0.0         0.0         2.0         0.0
+1949-50     Real Madrid C.F.10.0        10.0        10.0        0.0         900.0       0.0         0.0         0.0         2.0         0.0
+1950-51     Real Madrid C.F.13.0        13.0        13.0        0.0         1170.0      0.0         0.0         0.0         5.0         0.0
+1951-52     Real Racing Club26.0        26.0        26.0        0.0         2340.0      0.0         0.0         0.0         5.0         0.0
+1952-53     Real Racing Club9.0         8.0         9.0         0.0         744.0       0.0         0.0         1.0         1.0         1.0
+
+
+VAZQUEZ T.
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1939-40     At. de Madrid22.0        22.0        22.0        0.0         1980.0      0.0         0.0         0.0         4.0         0.0
+1940-41     At. de Madrid22.0        22.0        22.0        0.0         1980.0      0.0         0.0         0.0         5.0         0.0
+1941-42     At. de Madrid26.0        26.0        26.0        0.0         2340.0      0.0         0.0         0.0         2.0         0.0
+1942-43     At. de Madrid22.0        22.0        22.0        0.0         1980.0      0.0         0.0         0.0         1.0         0.0
+1943-44     At. de Madrid21.0        21.0        21.0        0.0         1890.0      0.0         0.0         0.0         8.0         0.0
+1944-45     At. de Madrid16.0        16.0        16.0        0.0         1440.0      0.0         0.0         0.0         4.0         0.0
+1945-46     At. de Madrid9.0         9.0         9.0         0.0         810.0       0.0         0.0         0.0         1.0         0.0
+1946-47     At. de Madrid2.0         2.0         2.0         0.0         180.0       0.0         0.0         0.0         0.0         0.0
+1947-48     RC Celta de Vigo22.0        22.0        22.0        0.0         1980.0      0.0         0.0         0.0         3.0         0.0
+1948-49     RC Celta de Vigo23.0        23.0        23.0        0.0         2070.0      0.0         0.0         0.0         8.0         0.0
+1949-50     RC Celta de Vigo24.0        24.0        24.0        0.0         2160.0      0.0         0.0         0.0         4.0         0.0
+1950-51     RC Celta de Vigo25.0        25.0        25.0        0.0         2250.0      0.0         0.0         0.0         15.0        0.0
+
+
+ARA
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1939-40     R.C.D. Espanyol6.0         6.0         6.0         0.0         540.0       0.0         0.0         0.0         2.0         0.0
+1940-41     R.C.D. Espanyol16.0        16.0        16.0        0.0         1440.0      0.0         0.0         0.0         7.0         0.0
+1941-42     R.C.D. Espanyol5.0         5.0         5.0         0.0         450.0       0.0         0.0         0.0         1.0         0.0
+1942-43     R.C.D. Espanyol3.0         3.0         3.0         0.0         270.0       0.0         0.0         0.0         2.0         0.0
+1943-44     C.D. Sabadell25.0        25.0        25.0        0.0         2250.0      0.0         0.0         0.0         6.0         1.0
+1944-45     C.D. Sabadell18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         1.0         0.0
+1946-47     Real Murcia C.F.19.0        19.0        19.0        0.0         1710.0      0.0         0.0         0.0         5.0         0.0
+1948-49     C.D. Alcoyano22.0        22.0        22.0        0.0         1980.0      0.0         0.0         0.0         3.0         0.0
+1950-51     Real Valladolid7.0         7.0         7.0         0.0         630.0       0.0         0.0         0.0         2.0         0.0
+
+
+AMADEO
+TEMPORADA   EQUIPO      PJUGADOS    PCOMPLETOS  PTITULAR    PSUPLENTE   MINUTOS     LESIONES    TARJETAS    EXPULSIONES GOLES       PENALTIES_FALLADOS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1935-36     Valencia C.F.12.0        12.0        12.0        0.0         1080.0      0.0         0.0         0.0         5.0         0.0
+1939-40     Valencia C.F.17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         8.0         0.0
+1940-41     Valencia C.F.18.0        18.0        18.0        0.0         1620.0      0.0         0.0         0.0         6.0         0.0
+1941-42     Valencia C.F.24.0        24.0        24.0        0.0         2160.0      0.0         0.0         0.0         8.0         0.0
+1942-43     Valencia C.F.20.0        20.0        20.0        0.0         1800.0      0.0         0.0         0.0         8.0         0.0
+1943-44     Valencia C.F.13.0        13.0        13.0        0.0         1170.0      0.0         0.0         0.0         1.0         0.0
+1944-45     Valencia C.F.17.0        17.0        17.0        0.0         1530.0      0.0         0.0         0.0         5.0         0.0
+1945-46     Valencia C.F.20.0        20.0        20.0        0.0         1800.0      0.0         0.0         0.0         6.0         0.0
+1946-47     Valencia C.F.26.0        26.0        26.0        0.0         2340.0      0.0         0.0         0.0         8.0         1.0
+1947-48     Valencia C.F.25.0        25.0        25.0        0.0         2250.0      0.0         0.0         0.0         10.0        1.0
+1948-49     Valencia C.F.10.0        10.0        10.0        0.0         900.0       0.0         0.0         0.0         5.0         0.0
+1949-50     Valencia C.F.10.0        10.0        10.0        0.0         900.0       0.0         0.0         0.0         3.0         0.0
+1950-51     Valencia C.F.5.0         5.0         5.0         0.0         450.0       0.0         0.0         0.0         1.0         1.0

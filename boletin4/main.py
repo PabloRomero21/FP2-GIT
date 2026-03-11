@@ -191,6 +191,7 @@ def main():
 
     # --- EJERCICIO 18 (GOLES POR DÉCADAS) ---
     print("--- EJERCICIO 18 (GOLES POR DÉCADAS) ---")
+    lista_nombres = []
     resultados_ej18 = la_liga.obtener_jugadores_goles_decadas_exacto(5)
     for r in resultados_ej18:
         decadas_str = ", ".join(map(str, r['decadas']))
@@ -198,6 +199,7 @@ def main():
         if "UNAMUNO" in nombre_final: nombre_final = "VICT. UNAMUNO"
         if "BIENZOBAS" in nombre_final: nombre_final = "P. BIENZOBAS"
         print(f"- {nombre_final}: Goles en {r['num_decadas']} décadas distintas ({decadas_str}).")
+        lista_nombres.append(nombre_final)
     print("\n")
 
 
@@ -237,7 +239,7 @@ def main():
 
     # --- EJERCICIO 22 (EQUIPOS MÁS ASCENDIDOS) ---
     print("--- EJERCICIO 22 (EQUIPOS MÁS ASCENDIDOS) ---")
-    top_ascensos = 5 
+    top_ascensos = 1
     resultados_ascensos = la_liga.obtener_equipos_mas_ascendidos(top_ascensos)
     for equipo, num_ascensos in resultados_ascensos:
         print(f"- {equipo}: {num_ascensos} ascensos")
@@ -246,7 +248,7 @@ def main():
 
     # --- EJERCICIO 23 (EQUIPOS CON MÁS TEMPORADAS) ---
     print("--- EJERCICIO 23 (EQUIPOS CON MÁS TEMPORADAS) ---")
-    top_n = 5 
+    top_n = 10
     resultados_temporadas = la_liga.obtener_equipos_mas_temporadas(top_n)
     for equipo, num in resultados_temporadas:
         print(f"- {equipo}: {num} temporadas")
@@ -350,8 +352,8 @@ def main():
 # --- EJERCICIO 35 (HISTORIAL EN FILAS: ITURRINO) ---
     print("--- EJERCICIO 35 (HISTORIAL COMPLETO EN FILAS) ---")
     
-    nombres = ["ELDUAYEN","ITURRINO","P. LLORENTE","M. ANGEL G."]
-    for nombre_objetivo in nombres:
+    nombres = ["SARO","MARIN","CHOLIN","P. BIENZOBAS","VICT. UNAMUNO"]
+    for nombre_objetivo in lista_nombres:
         historial = la_liga.obtener_historial_jugador_completo(nombre_objetivo)
         print(nombre_objetivo)
         if historial:

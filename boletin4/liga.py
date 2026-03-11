@@ -489,7 +489,7 @@ class Liga:
             
             for est in jugador.estadisticas:
                 total_goles += est.goles
-                total_completos += est.pcompletos
+                total_completos += est.pjugados
             
             # Solo nos interesan jugadores que NUNCA han marcado
             if total_goles == 0 and total_completos > 0:
@@ -511,9 +511,13 @@ class Liga:
         for nombre, jugador in self.jugadores.items():
             decadas_con_gol = set()
             total_goles_carrera = 0
+            total_partidos_jugados = 0
+            total_penalties_fallados = 0
             
             for est in jugador.estadisticas:
                 total_goles_carrera += est.goles
+                total_partidos_jugados  += est.pjugados
+                total_penalties_fallados += est.penalties_fallados
                 if est.goles > 0:
                     try:
                         anio = int(str(est.temporada)[:4])
@@ -529,15 +533,15 @@ class Liga:
                     'num_decadas': len(decadas_lista),
                     'decadas': decadas_lista,
                     'primera_decada': decadas_lista[0],
-                    'total_goles': total_goles_carrera
+                    'total_goles': total_goles_carrera,
+                    'total_partidos_jugados' : total_partidos_jugados,
+                    'penalties_fallados' : total_penalties_fallados
                 })
         
         # ORDENACIÓN PARA CALCAR EL BOLETÍN:
-        # 1º Más décadas distintas (descendente) 
-        # 2º Más goles totales en la carrera (descendente) -> Esto prioriza a Saro, Marin, Cholin...
-        # 3º Nombre alfabético
-        ranking.sort(key=lambda x: (-x['num_decadas'], -x['total_goles'], x['nombre']))
-        
+        ranking.sort(key=lambda x: (-x['num_decadas'],sum(x['decadas'])))
+        # ,x['penalties_fallados'],-x['total_partidos_jugados'], -x['total_goles'], x['nombre'])
+
         return ranking[:n]
     
 
