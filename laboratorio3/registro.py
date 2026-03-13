@@ -66,6 +66,22 @@ class Registro:
             
         distancias_con_indice.sort(key=lambda x: x[0])
         return [item[1] for item in distancias_con_indice[:k]]
+    
+    def estandarizar(self, medias, desviaciones):
+        """
+        Calcula y devuelve una lista con los atributos estandarizados (Z-Score).
+        """
+        atributos_estandarizados = []
+        for valor, media, desv in zip(self.atributos, medias, desviaciones):
+            if desv == 0:
+                # Si la desviación es 0 (todos los números de la columna son iguales)
+                atributos_estandarizados.append(0.0)
+            else:
+                # Fórmula Z-Score
+                nuevo_valor = (valor - media) / desv
+                atributos_estandarizados.append(nuevo_valor)
+                
+        return atributos_estandarizados
 
     def __repr__(self):
         # Mostramos los valores redondeados para una lectura limpia en consola
