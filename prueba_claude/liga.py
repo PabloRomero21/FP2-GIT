@@ -343,48 +343,75 @@ class Liga:
 
         ranking.sort(key=lambda x: x[1], reverse=True)
         return ranking[:n]
+    
 
-    ###EJERCICIO 10###
-    def obtener_tarjetas_equipo_temporada(self, equipo: str, temporada: str) -> int:
+### EJERCICIO 10 ###
+    def obtener_equipos_mas_tarjeteados(self, n: int) -> list:
         """
-        Suma todas las tarjetas (amarillas + expulsiones) de un equipo en una temporada concreta.
+        Calcula el total de tarjetas (amarillas + expulsiones) de cada equipo 
+        en cada temporada y devuelve los 'n' registros con más tarjetas.
+        Retorna una lista de tuplas: [(nombre_equipo, temporada, total_tarjetas)]
         """
-        total_tarjetas = 0
-        equipo_buscado = equipo.upper()
+        resultados_temp = []
 
-        for temporada_obj, equipo_obj, jugador in self._iterar_historial():
-            if (equipo_obj.nombre.upper() == equipo_buscado and
-                    temporada_obj.id_temporada == str(temporada)):
-                total_tarjetas += (jugador.estadistica.tarjetas + jugador.estadistica.expulsiones)
+        # Iteramos a través de la jerarquía de objetos: Temporadas -> Equipos
+        for id_temporada, temporada_obj in self.temporadas.items():
+            for nombre_equipo, equipo_obj in temporada_obj.equipos.items():
+                
+                # Aprovechamos la propiedad derivada que ya existe en la clase Equipo
+                tarjetas_equipo = equipo_obj.total_tarjetas
+                
+                if tarjetas_equipo > 0:
+                    resultados_temp.append((equipo_obj.nombre, id_temporada, tarjetas_equipo))
 
-        return int(total_tarjetas)
+        # Ordenamos la lista de mayor a menor (reverse=True) basándonos en las tarjetas (índice 2)
+        resultados_temp.sort(key=lambda x: x[2], reverse=True)
 
-    ###EJERCICIO 11###
-    def obtener_revulsivos(self, lista_jugadores: list) -> dict:
+        # Devolvemos solo los 'n' primeros elementos
+        return resultados_temp[:n]
+    
+    
+### EJERCICIO 11 ###
+    def obtener_revulsivos(self, n: int) -> dict:
         """
-        Para una lista de nombres, calcula su goles totales y minutos por gol.
-        Devuelve: {nombre: (total_goles, minutos_por_gol)}
+        Calcula los goles totales y minutos por gol de los jugadores.
+        Filtra solo a aquellos que en el global de su carrera hayan jugado más 
+        partidos de suplente que de titular (verdaderos revulsivos) y tengan >= 10 goles.
+        Devuelve los 'n' jugadores con el mejor ratio.
         """
-        resultados = {}
+        resultados_temp = []
 
-        for nombre in lista_jugadores:
-            nombre_buscado = nombre.upper()
-
-            if nombre_buscado not in self._jugadores_idx:
-                continue
-
+        for nombre_jugador, historial in self._jugadores_idx.items():
             total_goles = 0
             total_minutos = 0
+            total_titular = 0
+            total_suplente = 0
 
-            for _, _, jugador in self._jugadores_idx[nombre_buscado]:
+            # Sumamos TODO el historial del jugador
+            for _, _, jugador in historial:
                 total_goles += jugador.estadistica.goles
                 total_minutos += jugador.estadistica.minutos
+                total_titular += jugador.estadistica.ptitular
+                total_suplente += jugador.estadistica.psuplente
 
-            if total_goles > 0:
+            # FILTRO DE CARRERA COMPLETA:
+            # ¿Fue un eterno suplente a lo largo de su vida? ¿Marcó al menos 10 goles?
+            if (total_suplente > total_titular) and (total_goles >= 10):
                 minutos_por_gol = int(total_minutos / total_goles)
-                resultados[nombre] = (int(total_goles), minutos_por_gol)
+                resultados_temp.append((nombre_jugador, int(total_goles), minutos_por_gol))
 
-        return resultados
+        # Ordenamos de menor a mayor ratio
+        resultados_temp.sort(key=lambda x: x[2])
+
+        # Construimos el diccionario de salida
+        resultados_finales = {}
+        for item in resultados_temp[:n]:
+            nombre = item[0]
+            goles = item[1]
+            ratio = item[2]
+            resultados_finales[nombre] = (goles, ratio)
+
+        return resultados_finales
 
     ###EJERCICIO 12###
     def obtener_top_jugadores_mas_temporadas(self, n: int) -> list:

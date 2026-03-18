@@ -115,27 +115,31 @@ def main():
     print("\n")
 
 
-    # --- EJERCICIO 10 (TARJETAS POR EQUIPO Y TEMPORADA) ---
-    print("--- EJERCICIO 10 (TARJETAS POR EQUIPO Y TEMPORADA) ---")
-    busquedas_ej10 = [
-        ("R.C.D. Espanyol", "2012-13"),
-        ("Real Zaragoza CD", "1996-97"),
-        ("Real Zaragoza CD", "1995-96")
-    ]
-    for equipo, temporada in busquedas_ej10:
-        tarjetas = la_liga.obtener_tarjetas_equipo_temporada(equipo, temporada)
+# --- EJERCICIO 10 (EQUIPOS CON MÁS TARJETAS) ---
+    print("--- EJERCICIO 10 ---")
+    
+    n_equipos = 3
+    # Llamamos al método indicando que queremos el top 'n'
+    equipos_violentos = la_liga.obtener_equipos_mas_tarjeteados(n_equipos)
+    
+    # Desempaquetamos la tupla directamente en el for
+    for equipo, temporada, tarjetas in equipos_violentos:
         print(f"- {equipo} ({temporada}): {tarjetas} tarjetas conjuntas.")
+        
     print("\n")
 
 
-    # --- EJERCICIO 11 (REVULSIVOS DE ORO) ---
-    print("--- EJERCICIO 11 (REVULSIVOS DE ORO) ---")
-    nombres_ej11 = ["MORATA", "LOINAZ", "BOJAN"]
-    resultados_ej11 = la_liga.obtener_revulsivos(nombres_ej11)
-    for nombre in nombres_ej11:
-        if nombre in resultados_ej11:
-            goles, min_por_gol = resultados_ej11[nombre]
-            print(f"- {nombre}: {goles} goles. Marca un gol cada {min_por_gol} minutos.")
+# --- EJERCICIO 11 (LOS 'N' MEJORES RATIOS GOLEADORES) ---
+    print("--- EJERCICIO 11 ---")
+    
+    n_mejores = 3
+    # Llamamos al método pasando únicamente la cantidad 'n' deseada
+    mejores_revulsivos = la_liga.obtener_revulsivos(n_mejores)
+    
+    # Iteramos y formateamos el string para que salga por pantalla
+    for nombre, (goles, minutos) in mejores_revulsivos.items():
+        print(f"- {nombre}: {goles} goles. Marca un gol cada {minutos} minutos.")
+        
     print("\n")
 
 
