@@ -28,3 +28,24 @@ class Provincia:
             for nombre_partido, votos, diputados in lista_partidos:
                 # La clave es el nombre, el valor es la tupla (votos, diputados)
                 self.resultados_partidos[nombre_partido] = (votos, diputados)
+
+    @property
+    def porcentaje_nulos_blancos(self):
+        """Propiedad derivada: Calcula el % de votos nulos y en blanco sobre el total de votantes."""
+        votos_invalidos = self.votos_en_blanco + self.votos_en_nulo
+        
+        # Evitamos el error de división por cero por si hay datos corruptos
+        if self.total_votantes == 0:
+            return 0.0
+            
+        return (votos_invalidos / self.total_votantes) * 100
+    
+
+    @property
+    def participacion_cera(self):
+        """Calcula el % de participación de los residentes ausentes (CERA)."""
+        # Evitamos la división por cero si en alguna provincia no hay censo CERA
+        if self.censo_cera == 0:
+            return 0.0
+            
+        return (self.total_votantes_cera / self.censo_cera) * 100

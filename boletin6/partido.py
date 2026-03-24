@@ -16,3 +16,19 @@ class Partido:
                 
                 # 2. Guardamos la tupla (votos, diputados) en la provincia y comunidad correspondientes
                 self.resultados_por_comunidad[comunidad][provincia] = (votos, diputados)
+
+
+
+    @property
+    def num_provincias_presentado(self):
+        """
+        Propiedad derivada: Calcula en cuántas provincias en total 
+        se ha presentado este partido.
+        """
+        total_provincias = 0
+        # Recorremos los diccionarios de provincias de cada comunidad
+        for provincias_comunidad in self.resultados_por_comunidad.values():
+            # Sumamos la cantidad de provincias (la longitud del diccionario)
+            total_provincias += len(provincias_comunidad)
+            
+        return total_provincias
