@@ -2,7 +2,7 @@ from fabrica_elecciones import FabricaElecciones
 
 
 def main():
-    ruta_archivo = "PROV_02_202307_1.xlsx"
+    ruta_archivo = "C:/Users/romer/Desktop/FP2-GIT/FP2-GIT/boletin6/PROV_02_202307_1.xlsx"
 
     print("Iniciando la lectura y construccion de datos... Esto puede tardar unos segundos.")
 

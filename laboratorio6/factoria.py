@@ -8,17 +8,21 @@ class Factoria:
     los objetos del modelo, distribuyéndolos en sus gestores correspondientes.
     """
     
-    def __init__(self, ruta_anexo1: str, ruta_anexo2: str, ruta_anexo3: str, ruta_anexo4: str):
+    def __init__(self, ruta_anexo1: str, ruta_anexo2: str, ruta_anexo3: str, ruta_anexo4: str, ruta_poblacion: str): # Añadimos ruta_poblacion
         self.ruta_anexo1 = ruta_anexo1
         self.ruta_anexo2 = ruta_anexo2
         self.ruta_anexo3 = ruta_anexo3
         self.ruta_anexo4 = ruta_anexo4
+        self.ruta_poblacion = ruta_poblacion # La guardamos
 
     def procesar_datos(self) -> tuple[Gestor_Proyectos, Gestor_ProyectosConcedidos, Gestor_ProyectosContrato]:
         gestor_general = Gestor_Proyectos()
         gestor_concedidos = Gestor_ProyectosConcedidos()
         gestor_contratos = Gestor_ProyectosContrato()
 
+        # NUEVO: Leemos la población primero y se la metemos al gestor general
+        self._leer_poblacion(gestor_general)
+        
         self._leer_denegados(gestor_general)
         self._leer_concedidos(gestor_general, gestor_concedidos)
         self._leer_contratos(gestor_general, gestor_concedidos, gestor_contratos)
@@ -47,6 +51,21 @@ class Factoria:
             return float(v)
         except ValueError:
             return 0.0
+    
+    def _leer_poblacion(self, gestor_general: Gestor_Proyectos):
+        """Lee el Excel de población y carga los datos en el gestor."""
+        try:
+            wb = openpyxl.load_workbook(self.ruta_poblacion, data_only=True)
+            ws = wb.active
+            for fila in ws.iter_rows(min_row=2, values_only=True):
+                if fila[0] is not None and fila[1] is not None:
+                    nombre_ccaa = str(fila[0]).strip().upper()
+                    habitantes = int(fila[1])
+                    # Inyectamos el dato directamente en la memoria del gestor
+                    gestor_general.agregar_poblacion(nombre_ccaa, habitantes)
+            wb.close()
+        except FileNotFoundError:
+            print(f"⚠️ AVISO: No se encontró el archivo de población '{self.ruta_poblacion}'. Los cálculos per cápita no funcionarán.")
 
     def _leer_denegados(self, gestor_general: Gestor_Proyectos):
         """Lee el Anexo III (Denegados) y crea objetos Proyecto."""
