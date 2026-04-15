@@ -1,4 +1,4 @@
-from fabrica_elecciones import FabricaElecciones
+from factoria_elecciones import FabricaElecciones
 
 
 def main():

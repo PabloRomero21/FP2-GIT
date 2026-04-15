@@ -80,7 +80,7 @@ class FabricaElecciones:
             c = inicio_partidos
             for nombre_partido in nombres_partidos:
                 votos     = self._entero(fila[c])
-                diputados = self._entero(fila[c + 1])+
+                diputados = self._entero(fila[c + 1])
                 c += 2
                 if votos == 0:
                     continue
