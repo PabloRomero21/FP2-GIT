@@ -9,7 +9,7 @@ class Nomenclator:
             self.nombres (dict): Diccionario donde la clave es una tupla (texto, es_hombre)
                                  y el valor es la instancia del objeto Nombre.
         """
-        # Estructura: {(str, bool): <objeto Nombre>}
+
         self.nombres = {}
 
     def obtener_nombre(self, texto, es_hombre):
@@ -21,13 +21,12 @@ class Nomenclator:
         clave = (texto.upper(), es_hombre)
         
         if clave not in self.nombres:
-            # Importante: Aquí se asume que la clase Nombre está disponible 
-            # o se importará al principio del archivo.
+
             from nombre import Nombre
             self.nombres[clave] = Nombre(texto.upper(), es_hombre)
             
         return self.nombres[clave]
-
+#ejericio1
     def exportar_a_excel(self, ruta_archivo):
         """
         Exporta la información completa a un archivo Excel.
@@ -35,33 +34,27 @@ class Nomenclator:
         """
         import openpyxl
         
-        # 1. Identificar todas las décadas únicas para definir las columnas
         todas_decadas = set()
         for nombre_obj in self.nombres.values():
             for dato in nombre_obj.datos_por_decada:
                 todas_decadas.add(dato.decada)
-        
-        # Ordenamos las décadas para que las columnas tengan sentido temporal
+      
         decadas_lista = sorted(list(todas_decadas))
 
-        # 2. Crear el libro y la hoja de Excel
         wb = openpyxl.Workbook()
         hoja = wb.active
         hoja.title = "Nomenclator"
 
-        # 3. Crear y escribir la fila de cabeceras
         cabeceras = ["Nombre", "Género"]
         for decada in decadas_lista:
             cabeceras.append(f"{decada} (Frec)")
             cabeceras.append(f"{decada} (TPM)")
         hoja.append(cabeceras)
 
-        # 4. Escribir los datos de cada nombre
         for nombre_obj in self.nombres.values():
             genero = "Hombre" if nombre_obj.es_hombre else "Mujer"
             fila = [nombre_obj.texto, genero]
-            
-            # Mapeamos los datos de este objeto para buscarlos por década fácilmente
+      
             datos_map = {d.decada: d for d in nombre_obj.datos_por_decada}
             
             for decada in decadas_lista:
@@ -69,16 +62,15 @@ class Nomenclator:
                     fila.append(datos_map[decada].frecuencia_abs)
                     fila.append(datos_map[decada].tanto_por_mil)
                 else:
-                    # Si el nombre no aparece en esa década, ponemos 0
+
                     fila.append(0)
                     fila.append(0.0)
             
             hoja.append(fila)
 
-        # 5. Guardar el archivo en la ruta especificada
         wb.save(ruta_archivo)
 
-
+#ejericio 2
     def nombre_mas_frecuente(self, es_hombre=None):
         """
         Devuelve el objeto Nombre con mayor frecuencia absoluta acumulada.
@@ -92,12 +84,11 @@ class Nomenclator:
         if not nombres_filtrados:
             return None
 
-        # Usamos max() para encontrar el que tiene la mayor frecuencia acumulada
         nombre_max = max(nombres_filtrados, key=lambda n: n.frecuencia_acumulada)
         
         return nombre_max
     
-
+#ejericio3
     def n_nombres_mas_usados(self, n, es_hombre=None):
         """
         Devuelve una lista con los 'n' objetos Nombre más usados en el histórico.
@@ -108,31 +99,26 @@ class Nomenclator:
             if es_hombre is None or obj_nombre.es_hombre == es_hombre:
                 nombres_filtrados.append(obj_nombre)
         
-        # Ordenamos la lista de mayor a menor (reverse=True) usando la frecuencia acumulada
+    
         nombres_ordenados = sorted(nombres_filtrados, key=lambda x: x.frecuencia_acumulada, reverse=True)
         
-        # Devolvemos solo los primeros 'n' elementos
         return nombres_ordenados[:n]
     
-
+#ejericio 4
     def frecuencias_iniciales_por_decada(self, es_hombre=None):
         """
         Devuelve un diccionario {Inicial: [(Década, Frec_Acumulada), ...]} 
         con la suma de frecuencias absolutas por década para cada inicial.
         """
-        # 1. Diccionario temporal para ir sumando: {Inicial: {Decada: Suma}}
         temp_sumas = {}
 
-        # Recorremos todos los nombres filtrando por género
         for obj_nombre in self.nombres.values():
             if es_hombre is None or obj_nombre.es_hombre == es_hombre:
                 inicial = obj_nombre.texto[0]
                 
-                # Inicializamos la letra en el diccionario si no existe
                 if inicial not in temp_sumas:
                     temp_sumas[inicial] = {}
                 
-                # Sumamos las frecuencias de este nombre en sus décadas correspondientes
                 for dato in obj_nombre.datos_por_decada:
                     decada = dato.decada
                     frecuencia = dato.frecuencia_abs
@@ -142,30 +128,24 @@ class Nomenclator:
                         
                     temp_sumas[inicial][decada] += frecuencia
 
-        # 2. Transformamos el diccionario temporal al formato final: {Inicial: [(Decada, Suma)]}
         diccionario_final = {}
         for inicial, decadas_dict in temp_sumas.items():
-            # Convertimos el diccionario interno en una lista de tuplas (Década, Frecuencia)
             lista_tuplas = list(decadas_dict.items())
             
-            # Ordenamos la lista por el nombre de la década para que quede ordenado
             lista_tuplas.sort(key=lambda x: x[0])
             
             diccionario_final[inicial] = lista_tuplas
 
         return diccionario_final
     
-
+#ejericio 5
     def inicial_mas_frecuente_por_decada(self, es_hombre=None):
         """
         Devuelve un diccionario {Década: (Letra_Mas_Frecuente, Porcentaje)} 
         basado en los datos de frecuencias por inicial.
         """
-        # 1. Llamamos a la función anterior para obtener los datos
         datos_iniciales = self.frecuencias_iniciales_por_decada(es_hombre)
         
-        # 2. Reestructuramos el diccionario para agrupar por década
-        # Formato temporal: {Decada: {Inicial: Frecuencia}}
         datos_por_decada = {}
         for inicial, lista_decadas in datos_iniciales.items():
             for decada, frecuencia in lista_decadas:
@@ -173,54 +153,44 @@ class Nomenclator:
                     datos_por_decada[decada] = {}
                 datos_por_decada[decada][inicial] = frecuencia
                 
-        # 3. Calculamos la letra ganadora y su porcentaje para cada década
         resultado_final = {}
         for decada, letras_dict in datos_por_decada.items():
-            # Sumamos todos los nacimientos de esa década (de todas las iniciales)
             total_decada = sum(letras_dict.values())
             
-            # Buscamos la inicial que tiene el valor (frecuencia) máximo
-            # .items() devuelve tuplas (letra, frec), ordenamos por el elemento [1]
             tupla_max = max(letras_dict.items(), key=lambda x: x[1])
             letra_ganadora = tupla_max[0]
             frecuencia_maxima = tupla_max[1]
             
-            # Calculamos el porcentaje y lo redondeamos a 2 decimales
             porcentaje = (frecuencia_maxima / total_decada) * 100
             
             resultado_final[decada] = (letra_ganadora, round(porcentaje, 2))
             
-        # 4. Ordenamos el diccionario resultante cronológicamente por la clave (década)
         resultado_ordenado = dict(sorted(resultado_final.items()))
         
         return resultado_ordenado
     
-
+#ejericio 6
     def evolucion_nombres_compuestos(self, es_hombre=None):
         """
         Calcula el porcentaje de nombres simples vs compuestos por década.
         Devuelve una lista de tuplas: [(Década, %Simples, %Compuestos), ...]
         """
-        # 1. Diccionario de contadores: {Década: [Frec_Simples, Frec_Compuestos]}
-        # Usamos una lista de 2 elementos para poder ir sumando fácilmente
         conteo_decadas = {}
 
         for obj_nombre in self.nombres.values():
             if es_hombre is None or obj_nombre.es_hombre == es_hombre:
-                # Un nombre es compuesto si contiene un espacio en blanco
                 es_compuesto = " " in obj_nombre.texto.strip()
                 
                 for dato in obj_nombre.datos_por_decada:
                     decada = dato.decada
                     if decada not in conteo_decadas:
-                        conteo_decadas[decada] = [0, 0] # [Simples, Compuestos]
+                        conteo_decadas[decada] = [0, 0] 
                     
                     if es_compuesto:
                         conteo_decadas[decada][1] += dato.frecuencia_abs
                     else:
                         conteo_decadas[decada][0] += dato.frecuencia_abs
 
-        # 2. Convertir a porcentajes y ordenar temporalmente
         resultado_final = []
         decadas_ordenadas = sorted(conteo_decadas.keys())
 
@@ -239,19 +209,17 @@ class Nomenclator:
 
         return resultado_final
     
-
+#ejericio 7
 
     def longitud_media_por_decada(self, es_hombre=None):
         """
         Calcula la longitud media de los nombres ponderada por su frecuencia.
         Devuelve una lista de tuplas: [(Década, Longitud_Media), ...] ordenada.
         """
-        # Diccionario para acumular: {Década: [Suma_Longitudes, Total_Frecuencias]}
         datos_decada = {}
 
         for obj_nombre in self.nombres.values():
             if es_hombre is None or obj_nombre.es_hombre == es_hombre:
-                # Calculamos las letras del nombre (quitando posibles espacios extra)
                 longitud_nombre = len(obj_nombre.texto.strip())
                 
                 for dato in obj_nombre.datos_por_decada:
@@ -260,12 +228,9 @@ class Nomenclator:
                     if decada not in datos_decada:
                         datos_decada[decada] = [0, 0]
                     
-                    # Ponderamos: multiplicamos la longitud del nombre por las veces que se puso
                     datos_decada[decada][0] += longitud_nombre * dato.frecuencia_abs
-                    # Sumamos el total de personas
                     datos_decada[decada][1] += dato.frecuencia_abs
 
-        # Calculamos la media final y la guardamos en una lista
         resultado_final = []
         decadas_ordenadas = sorted(datos_decada.keys())
 
@@ -273,13 +238,12 @@ class Nomenclator:
             suma_longitudes, total_personas = datos_decada[decada]
             
             if total_personas > 0:
-                # Media = Suma de todas las letras / Total de personas
                 media = suma_longitudes / total_personas
                 resultado_final.append((decada, round(media, 2)))
 
         return resultado_final
     
-
+#ejericio 8
 
     def nombres_en_n_decadas(self, n, es_hombre=None):
         """
@@ -289,15 +253,11 @@ class Nomenclator:
         nombres_persistentes = []
 
         for obj_nombre in self.nombres.values():
-            # Filtramos por género
             if es_hombre is None or obj_nombre.es_hombre == es_hombre:
                 
-                # Comprobamos si el número de décadas registradas es mayor o igual a 'n'
                 if len(obj_nombre.datos_por_decada) >= n:
                     nombres_persistentes.append(obj_nombre)
 
-        # Ordenamos la lista para que salgan primero los que han estado en MÁS décadas
-        # y en caso de empate, los que tengan mayor frecuencia acumulada
         nombres_persistentes.sort(
             key=lambda x: (len(x.datos_por_decada), x.frecuencia_acumulada), 
             reverse=True

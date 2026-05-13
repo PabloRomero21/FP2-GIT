@@ -9,12 +9,8 @@ class DatosDecada:
 
 class Nombre:
     def __init__(self, texto, es_hombre):
-        # El nombre de pila (ej: "Juan")[cite: 4].
         self.texto = texto
-        # Propiedad que indica si es de hombre o mujer[cite: 8].
         self.es_hombre = es_hombre
-        # Lista que asocia el nombre con sus datos por década.
-        # Si no está entre los 50 más frecuentes, no se añade a esta lista[cite: 7].
         self.datos_por_decada = []
 
     def añadir_datos_decada(self, decada, frecuencia_abs, tanto_por_mil):

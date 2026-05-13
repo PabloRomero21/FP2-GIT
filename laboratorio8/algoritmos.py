@@ -1,37 +1,21 @@
 import numpy as np
 
 class AlgoritmoOptimizacion:
-    """
-    Clase base para todos los algoritmos de optimización.
-    Contiene la configuración común y métodos de utilidad.
-    """
+    """Clase base para todos los algoritmos de optimización."""
     def __init__(self, dimensiones=10, limite_inferior=-10, limite_superior=10):
         self.dimensiones = dimensiones
         self.limite_inferior = limite_inferior
         self.limite_superior = limite_superior
+        self.historial = []  # Libreta para apuntar el avance
 
+    def generar_punto_aleatorio(self):
+        return np.random.uniform(self.limite_inferior, self.limite_superior, self.dimensiones)
 
     def formatear_vector(self, vector):
-        """Devuelve una representación amigable del vector de soluciones."""
-        # Tomamos los 10 valores y los redondeamos a 4 decimales para que quepan en pantalla
         valores_str = ", ".join([f"{v:7.4f}" for v in vector])
         return f"[{valores_str}]"
 
-    def generar_punto_aleatorio(self):
-        """Genera un array de números aleatorios dentro de los límites."""
-        return np.random.uniform(
-            self.limite_inferior, 
-            self.limite_superior, 
-            self.dimensiones
-        )
-    
-
     def grid_search(self, funcion, combinaciones_parametros, evaluaciones_por_prueba):
-        """
-        Prueba diferentes configuraciones y se queda con la mejor.
-        'combinaciones_parametros' es una lista de diccionarios.
-        """
-        # Si es un algoritmo sin parámetros (como la Búsqueda Aleatoria), no hacemos nada
         if not combinaciones_parametros:
             return None
 
@@ -39,45 +23,31 @@ class AlgoritmoOptimizacion:
         mejores_parametros = None
 
         for parametros in combinaciones_parametros:
-            # 1. Inyectamos los parámetros al algoritmo (Ej: se le pone la temperatura o el paso)
             for clave, valor in parametros.items():
                 setattr(self, clave, valor)
 
-            # 2. Calculamos el presupuesto para esta prueba concreta
             limite_evaluaciones = funcion.presupuesto_gastado + evaluaciones_por_prueba
-
-            # 3. Lanzamos el algoritmo "de prueba" y vemos hasta dónde baja
             _, valor_obtenido = self.ejecutar(funcion, limite_evaluaciones)
 
-            # 4. Comprobamos si esta configuración es la campeona hasta ahora
             if valor_obtenido < mejor_resultado:
                 mejor_resultado = valor_obtenido
                 mejores_parametros = parametros.copy()
 
-        # 5. MUY IMPORTANTE: Dejamos el algoritmo configurado con los parámetros ganadores 
-        # para que estén listos de cara a la ejecución final
         for clave, valor in mejores_parametros.items():
             setattr(self, clave, valor)
 
         return mejores_parametros
-    
-    
 
     def ejecutar(self, funcion, max_evaluaciones):
-        """
-        Método principal que deberán sobrescribir las clases hijas.
-        """
-        raise NotImplementedError("Este método debe ser implementado por el algoritmo específico.")
+        raise NotImplementedError("Implementar en clase hija.")
 
 
 class BusquedaAleatoria(AlgoritmoOptimizacion):
-    """Algoritmo 1: Búsqueda Aleatoria Pura"""
-    
-    # No necesitamos un __init__ propio porque usamos el del padre
-    
     def ejecutar(self, funcion, max_evaluaciones):
+        self.historial = []
         mejor_x = self.generar_punto_aleatorio()
-        mejor_valor = funcion.evaluar(mejor_x) 
+        mejor_valor = funcion.evaluar(mejor_x)
+        self.historial.append(mejor_valor)
         
         while funcion.presupuesto_gastado < max_evaluaciones:
             candidato_x = self.generar_punto_aleatorio()
@@ -86,42 +56,45 @@ class BusquedaAleatoria(AlgoritmoOptimizacion):
             if valor_candidato < mejor_valor:
                 mejor_valor = valor_candidato
                 mejor_x = candidato_x
+            
+            self.historial.append(mejor_valor)
                 
         return mejor_x, mejor_valor
 
 
 class HillClimbing(AlgoritmoOptimizacion):
-    """Algoritmo 2: Ascenso de Colinas (Hill Climbing)"""
-    
     def __init__(self, tamano_paso=0.5, dimensiones=10, limite_inferior=-10, limite_superior=10):
-        # Llamamos al constructor del padre para inicializar dimensiones y límites
         super().__init__(dimensiones, limite_inferior, limite_superior)
-        # Añadimos el parámetro específico de este algoritmo
         self.tamano_paso = tamano_paso
         
     def ejecutar(self, funcion, max_evaluaciones):
+        self.historial = []
         mejor_x = self.generar_punto_aleatorio()
         mejor_valor = funcion.evaluar(mejor_x)
+        self.historial.append(mejor_valor)
+        
+        inicio_presupuesto = funcion.presupuesto_gastado 
+        evaluaciones_totales = max_evaluaciones - inicio_presupuesto
         
         while funcion.presupuesto_gastado < max_evaluaciones:
-            ruido = np.random.normal(0, self.tamano_paso, self.dimensiones)
-            candidato_x = mejor_x + ruido
+            # Paso dinámico que decrece con el tiempo
+            progreso = (funcion.presupuesto_gastado - inicio_presupuesto) / evaluaciones_totales
+            factor = max(1.0 - progreso, 0.01) 
             
-            # Aseguramos que no se salga de los límites [-10, 10]
-            candidato_x = np.clip(candidato_x, self.limite_inferior, self.limite_superior)
-            
+            ruido = np.random.normal(0, self.tamano_paso * factor, self.dimensiones)
+            candidato_x = np.clip(mejor_x + ruido, self.limite_inferior, self.limite_superior)
             valor_candidato = funcion.evaluar(candidato_x)
             
             if valor_candidato < mejor_valor:
                 mejor_valor = valor_candidato
                 mejor_x = candidato_x
+            
+            self.historial.append(mejor_valor)
                 
         return mejor_x, mejor_valor
-    
+
 
 class RecocidoSimulado(AlgoritmoOptimizacion):
-    """Algoritmo 3: Recocido Simulado (Simulated Annealing)"""
-    
     def __init__(self, temperatura_inicial=100.0, tasa_enfriamiento=0.99, tamano_paso=0.5, dimensiones=10, limite_inferior=-10, limite_superior=10):
         super().__init__(dimensiones, limite_inferior, limite_superior)
         self.temperatura_inicial = temperatura_inicial
@@ -129,49 +102,42 @@ class RecocidoSimulado(AlgoritmoOptimizacion):
         self.tamano_paso = tamano_paso
         
     def ejecutar(self, funcion, max_evaluaciones):
+        self.historial = []
         mejor_x = self.generar_punto_aleatorio()
         mejor_valor = funcion.evaluar(mejor_x)
         
-        # El recocido guarda el "estado actual", que no siempre es el "mejor global"
         x_actual = mejor_x.copy()
         valor_actual = mejor_valor
         temperatura = self.temperatura_inicial
+        self.historial.append(mejor_valor)
+        
+        inicio_presupuesto = funcion.presupuesto_gastado
+        evaluaciones_totales = max_evaluaciones - inicio_presupuesto
         
         while funcion.presupuesto_gastado < max_evaluaciones:
-            ruido = np.random.normal(0, self.tamano_paso, self.dimensiones)
-            candidato_x = x_actual + ruido
-            candidato_x = np.clip(candidato_x, self.limite_inferior, self.limite_superior)
+            progreso = (funcion.presupuesto_gastado - inicio_presupuesto) / evaluaciones_totales
+            factor = max(1.0 - progreso, 0.01)
             
+            ruido = np.random.normal(0, self.tamano_paso * factor, self.dimensiones)
+            candidato_x = np.clip(x_actual + ruido, self.limite_inferior, self.limite_superior)
             valor_candidato = funcion.evaluar(candidato_x)
             
-            # Calculamos la diferencia (si es negativa, es que hemos mejorado)
             diferencia = valor_candidato - valor_actual
-            
-            # ¿Aceptamos el nuevo paso?
-            # 1. Si mejora (diferencia < 0), lo aceptamos siempre.
-            # 2. Si empeora, lo aceptamos con una probabilidad que depende de la Temperatura
             if diferencia < 0 or np.random.rand() < np.exp(-diferencia / temperatura):
                 x_actual = candidato_x
                 valor_actual = valor_candidato
-                
-                # Si además de aceptarlo, resulta ser el mejor de TODA la historia, lo guardamos
                 if valor_candidato < mejor_valor:
                     mejor_valor = valor_candidato
                     mejor_x = candidato_x.copy()
                     
-            # Enfriamos un poquito la temperatura para el siguiente ciclo
             temperatura *= self.tasa_enfriamiento
-            
-            # Evitamos que la temperatura llegue a 0 absoluto para no dividir por 0
             temperatura = max(temperatura, 1e-8)
+            self.historial.append(mejor_valor)
                 
         return mejor_x, mejor_valor
-    
 
 
 class BusquedaLocalIterada(AlgoritmoOptimizacion):
-    """Algoritmo 4: Búsqueda Local Iterada (Iterated Local Search - ILS)"""
-    
     def __init__(self, paso_local=0.1, paso_perturbacion=2.0, iteraciones_locales=50, dimensiones=10, limite_inferior=-10, limite_superior=10):
         super().__init__(dimensiones, limite_inferior, limite_superior)
         self.paso_local = paso_local
@@ -179,39 +145,42 @@ class BusquedaLocalIterada(AlgoritmoOptimizacion):
         self.iteraciones_locales = iteraciones_locales
         
     def ejecutar(self, funcion, max_evaluaciones):
+        self.historial = []
         mejor_x_global = self.generar_punto_aleatorio()
         mejor_valor_global = funcion.evaluar(mejor_x_global)
+        self.historial.append(mejor_valor_global)
+        
+        inicio_presupuesto = funcion.presupuesto_gastado
+        evaluaciones_totales = max_evaluaciones - inicio_presupuesto
         
         while funcion.presupuesto_gastado < max_evaluaciones:
-            # 1. Perturbación (Damos un salto grande desde el mejor global conocido)
-            # (No lo hacemos en la primerísima vuelta para aprovechar el punto aleatorio puro)
+            progreso = (funcion.presupuesto_gastado - inicio_presupuesto) / evaluaciones_totales
+            factor = max(1.0 - progreso, 0.1)
+            
             if funcion.presupuesto_gastado > 1:
-                ruido_fuerte = np.random.normal(0, self.paso_perturbacion, self.dimensiones)
-                x_actual = mejor_x_global + ruido_fuerte
-                x_actual = np.clip(x_actual, self.limite_inferior, self.limite_superior)
+                ruido_fuerte = np.random.normal(0, self.paso_perturbacion * factor, self.dimensiones)
+                x_actual = np.clip(mejor_x_global + ruido_fuerte, self.limite_inferior, self.limite_superior)
                 valor_actual = funcion.evaluar(x_actual)
+                self.historial.append(mejor_valor_global)
             else:
                 x_actual = mejor_x_global.copy()
                 valor_actual = mejor_valor_global
 
-            # Control de seguridad por si la perturbación gastó el último intento
             if funcion.presupuesto_gastado >= max_evaluaciones: 
                 break
 
-            # 2. Búsqueda Local (Hacemos un Hill Climbing cortito desde el nuevo punto)
-            evaluaciones_inicio_local = funcion.presupuesto_gastado
-            while (funcion.presupuesto_gastado - evaluaciones_inicio_local) < self.iteraciones_locales and funcion.presupuesto_gastado < max_evaluaciones:
-                ruido_suave = np.random.normal(0, self.paso_local, self.dimensiones)
-                candidato_x = x_actual + ruido_suave
-                candidato_x = np.clip(candidato_x, self.limite_inferior, self.limite_superior)
-                
+            eval_inicio_local = funcion.presupuesto_gastado
+            while (funcion.presupuesto_gastado - eval_inicio_local) < self.iteraciones_locales and funcion.presupuesto_gastado < max_evaluaciones:
+                ruido_suave = np.random.normal(0, self.paso_local * factor, self.dimensiones)
+                candidato_x = np.clip(x_actual + ruido_suave, self.limite_inferior, self.limite_superior)
                 valor_candidato = funcion.evaluar(candidato_x)
                 
                 if valor_candidato < valor_actual:
                     valor_actual = valor_candidato
                     x_actual = candidato_x
-                    
-            # 3. ¿Hemos superado al mejor global de todos los tiempos?
+                
+                self.historial.append(mejor_valor_global)
+
             if valor_actual < mejor_valor_global:
                 mejor_valor_global = valor_actual
                 mejor_x_global = x_actual.copy()
@@ -220,34 +189,36 @@ class BusquedaLocalIterada(AlgoritmoOptimizacion):
 
 
 class BusquedaVecindadVariable(AlgoritmoOptimizacion):
-    """Algoritmo 5: Búsqueda de Vecindad Variable Continua (VNS)"""
-    
     def __init__(self, vecindarios=[0.1, 0.5, 1.0, 2.0, 5.0], dimensiones=10, limite_inferior=-10, limite_superior=10):
         super().__init__(dimensiones, limite_inferior, limite_superior)
         self.vecindarios = vecindarios
         
     def ejecutar(self, funcion, max_evaluaciones):
+        self.historial = []
         mejor_x = self.generar_punto_aleatorio()
         mejor_valor = funcion.evaluar(mejor_x)
+        self.historial.append(mejor_valor)
         
-        k = 0 # Índice del tamaño de paso actual
+        k = 0 
+        inicio_presupuesto = funcion.presupuesto_gastado
+        evaluaciones_totales = max_evaluaciones - inicio_presupuesto
         
         while funcion.presupuesto_gastado < max_evaluaciones:
-            tamano_paso = self.vecindarios[k]
+            progreso = (funcion.presupuesto_gastado - inicio_presupuesto) / evaluaciones_totales
+            factor = max(1.0 - progreso, 0.05)
             
+            tamano_paso = self.vecindarios[k] * factor
             ruido = np.random.normal(0, tamano_paso, self.dimensiones)
-            candidato_x = mejor_x + ruido
-            candidato_x = np.clip(candidato_x, self.limite_inferior, self.limite_superior)
-            
+            candidato_x = np.clip(mejor_x + ruido, self.limite_inferior, self.limite_superior)
             valor_candidato = funcion.evaluar(candidato_x)
             
             if valor_candidato < mejor_valor:
-                # Si mejoramos, guardamos y volvemos al paso más pequeño (k=0) para afinar
                 mejor_valor = valor_candidato
                 mejor_x = candidato_x
                 k = 0 
             else:
-                # Si no mejoramos, pasamos al siguiente tamaño de paso (más grande)
                 k = (k + 1) % len(self.vecindarios)
+            
+            self.historial.append(mejor_valor)
                 
         return mejor_x, mejor_valor
